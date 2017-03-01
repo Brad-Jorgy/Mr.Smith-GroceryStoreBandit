@@ -37,6 +37,13 @@ public class Main {
 		updateFrame();
 	}
 
+	public static void showCheckoutScreen()
+	{
+		frame.getContentPane().removeAll();
+		CheckoutScreen.addComponentsToPane(frame.getContentPane());
+		updateFrame();
+	}
+
 	public static void main(String[] args) {
 		//System.out.print("start");
 		SwingUtilities.invokeLater(new Runnable(){

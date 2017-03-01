@@ -12,16 +12,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class MainScreen {
-    // private static JButton checkoutBtn = new JButton("Checkout");
-    // private static JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
-    // private static JButton inventoryBtn = new JButton("Inventory");
+public class CheckoutScreen {
 
     public static void addComponentsToPane(Container pane)
     {
-				JButton checkoutBtn = new JButton("Checkout");
-				JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
-				JButton inventoryBtn = new JButton("Inventory");
+        JButton backBtn = new JButton("Back to Main Screen");
+        JLabel title = new JLabel("Check Out", SwingConstants.CENTER);
+        JButton inventoryBtn = new JButton("Noob");
         pane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -32,26 +29,18 @@ public class MainScreen {
         c.gridwidth = 6;
         c.gridheight = 1;
 
-				inventoryBtn.addMouseListener(new MouseAdapter(){
-					public void mousePressed(MouseEvent e) {
-						Main.showInventoryScreen();
-						//System.out.print("clicked");
-					}
-				});
-        checkoutBtn.addMouseListener(new MouseAdapter(){
+        backBtn.addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent e) {
-                Main.showCheckoutScreen();
-                //System.out.print("clicked");
+                Main.showMainScreen();
             }
         });
         pane.add(title, c);
         c.gridx = 1;
         c.gridy = 1;
-        pane.add(checkoutBtn, c);
+        pane.add(backBtn, c);
         c.gridx = 2;
         c.gridy = 2;
         pane.add(inventoryBtn, c);
 
     }
-
 }
