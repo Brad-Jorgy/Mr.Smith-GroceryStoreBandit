@@ -44,6 +44,14 @@ public class Main {
 		updateFrame();
 	}
 
+	public static void showPaymentScreen()
+	{
+		frame.getContentPane().removeAll();
+		PaymentScreen.addComponentsToPane(frame.getContentPane());
+		updateFrame();
+	}
+
+
 	public static void main(String[] args) {
 		//System.out.print("start");
 		SwingUtilities.invokeLater(new Runnable(){
