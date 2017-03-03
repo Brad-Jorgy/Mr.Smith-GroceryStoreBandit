@@ -38,6 +38,13 @@ public class CheckoutScreen {
                 Main.showMainScreen();
             }
         });
+
+        addBtn.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                // add item to queue.
+            }
+        });
+
         pane.add(title, c);
         c.gridx = 1;
         c.gridy = 1;
