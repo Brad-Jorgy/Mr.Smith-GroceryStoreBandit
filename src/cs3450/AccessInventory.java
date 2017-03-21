@@ -6,6 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
@@ -76,6 +82,34 @@ interface DataAccess{
   public Product loadProduct(int id);
   public void saveAllProducts(Product[] products);
   public ArrayList<Product> loadAllProducts();
+};
+
+class sqliteAdapter implements DataAccess{
+  public void saveProduct(Product product){  }
+  public Product loadProduct(int id){
+    Product asdf = new Product(1,"Asd",2.1,5,"BEN");
+    return asdf;
+  }
+  public void saveAllProducts(Product[] products){}
+  public ArrayList<Product> loadAllProducts(){
+    Connection connection = null;
+    ArrayList<Product> products = new ArrayList<Product>();
+    try{
+      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select * from inventory");
+      while(rs.next()){
+        products.add(new Product(rs.getInt("itemId"), rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider")));
+        System.out.println("name = " + rs.getString("name"));
+        //System.out.println("id = " + rs.getInt("id"));
+      }
+    }
+    catch(SQLException e){
+      System.err.println(e.getMessage());
+    }
+    return products;
+  }
 };
 
 class XLSAdapter implements DataAccess{

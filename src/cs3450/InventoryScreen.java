@@ -16,7 +16,9 @@ public class InventoryScreen implements ListSelectionListener{
       JButton backBtn = new JButton("Back to Main Screen");
       JButton updateBtn = new JButton("Update Selected Product");
       JButton addBtn = new JButton("Add Product");
-      DataAccess db = new XLSAdapter();
+      DataAccess db = new sqliteAdapter();
+
+      // DataAccess db = new XLSAdapter();
       ArrayList<Product> products = db.loadAllProducts();
       for(int i = 0; i < products.size(); i++){
         listModel.addElement(products.get(i).getId()+": "+products.get(i).getName()+" $"+products.get(i).getPrice()+", "+products.get(i).getQuantity()+" in stock, ("+products.get(i).getProvider()+")");
