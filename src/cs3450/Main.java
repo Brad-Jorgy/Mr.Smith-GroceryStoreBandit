@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.Arrays;
+import java.util.*;
+import java.io.File;
 
 //import com.mongodb.*;
 //import com.mongodb.client.MongoCollection;
@@ -14,34 +16,63 @@ import java.util.Arrays;
 //import javax.xml.parsers.DocumentBuilder;
 //import javax.xml.parsers.DocumentBuilderFactory;
 //import com.mongodb.DB;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
+//import com.mongodb.MongoClient;
+//import com.mongodb.MongoClientURI;
+//import com.mongodb.client.MongoCollection;
+//import com.mongodb.client.MongoDatabase;
+//import org.bson.Document;
 
 import javax.swing.JFrame;
 //import javax.swing.text.Document;
 
 //import MainScreen;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class Main {
 	public static JFrame frame = new JFrame("Store Management System");
 
 	public static void startProgram()
 	{
-		MongoClient client = new MongoClient(new MongoClientURI("mongodb://brad:bikerman@ds115870.mlab.com:15870/grocery"));
-		try {
-			MongoDatabase db = client.getDatabase("grocery");
-			MongoCollection <Document> collection = db.getCollection("items");
-			collection.insertOne(new Document("authors", new Document().append("author_id", "1").append("name", "Chetan Bhagat"))
-					.append("book_id", "1").append("title", "One Indian Girl").append("isbn", "8129142147")
-					.append("price", "$14.99"));
-			collection.find();
-		}catch(Exception e){
-			e.printStackTrace();
+		File file = new File("cs3450.db");
+		if(!file.exists()){
+			Connection connection = null;
+			try{
+				connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+				Statement statement = connection.createStatement();
+				statement.setQueryTimeout(30);
+				statement.executeUpdate("create table if not exists inventory (itemId integer, name string, price double, quantity integer, provider string)");
+				DataAccess db = new XLSAdapter();
+	      ArrayList<Product> products = db.loadAllProducts();
+	      for(int i = 0; i < products.size(); i++){
+					System.out.println("insert into inventory values(" + products.get(i).getId() + ", '" + products.get(i).getName() + "', " + products.get(i).getPrice() + ", " + products.get(i).getQuantity() + ", '" + products.get(i).getProvider() + "')");
+					statement.executeUpdate("insert into inventory values(" + products.get(i).getId() + ", '" + products.get(i).getName() + "', " + products.get(i).getPrice() + ", " + products.get(i).getQuantity() + ", '" + products.get(i).getProvider() + "')");
+					System.out.println("reached");
+					//listModel.addElement(products.get(i).getId()+": "+products.get(i).getName()+" $"+products.get(i).getPrice()+", "+products.get(i).getQuantity()+" in stock, ("+products.get(i).getProvider()+")");
+	      }
+				ResultSet rs = statement.executeQuery("select * from inventory");
+				while(rs.next()){
+					System.out.println("name = " + rs.getString("name"));
+					//System.out.println("id = " + rs.getInt("id"));
+				}
+			}
+			catch(SQLException e){
+				System.err.println(e.getMessage());
+			}
+			finally{
+				try{
+					if(connection != null)
+						connection.close();
+				}
+				catch(SQLException e){
+					System.err.println(e.getMessage());
+				}
+			}
 		}
-
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setSize(new Dimension(1000,550));
