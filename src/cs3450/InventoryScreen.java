@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import com.mongodb.MongoClient;
+import java.util.*;
 
 public class InventoryScreen implements ListSelectionListener{
 
@@ -15,11 +16,11 @@ public class InventoryScreen implements ListSelectionListener{
       JButton backBtn = new JButton("Back to Main Screen");
       JButton updateBtn = new JButton("Update Selected Product");
       JButton addBtn = new JButton("Add Product");
-      listModel.addElement("Sam");
-      listModel.addElement("Sam1");
-      listModel.addElement("Sam2");
-      listModel.addElement("Sam3");
-      listModel.addElement("Sam4");
+      DataAccess db = new XLSAdapter();
+      ArrayList<Product> products = db.loadAllProducts();
+      for(int i = 0; i < products.size(); i++){
+        listModel.addElement(products.get(i).getId()+": "+products.get(i).getName()+" $"+products.get(i).getPrice()+", "+products.get(i).getQuantity()+" in stock, ("+products.get(i).getProvider()+")");
+      }
       JList list = new JList(listModel);
       list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
       list.setSelectedIndex(0);
