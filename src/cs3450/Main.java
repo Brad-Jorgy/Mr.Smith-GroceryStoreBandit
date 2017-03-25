@@ -9,23 +9,7 @@ import java.util.Arrays;
 import java.util.*;
 import java.io.File;
 
-//import com.mongodb.*;
-//import com.mongodb.client.MongoCollection;
-//import com.mongodb.client.MongoDatabase;
-//import com.mongodb.DBCollection;
-//import javax.xml.parsers.DocumentBuilder;
-//import javax.xml.parsers.DocumentBuilderFactory;
-//import com.mongodb.DB;
-//import com.mongodb.MongoClient;
-//import com.mongodb.MongoClientURI;
-//import com.mongodb.client.MongoCollection;
-//import com.mongodb.client.MongoDatabase;
-//import org.bson.Document;
-
 import javax.swing.JFrame;
-//import javax.swing.text.Document;
-
-//import MainScreen;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -52,13 +36,7 @@ public class Main {
 					System.out.println("insert into inventory values(" + products.get(i).getId() + ", '" + products.get(i).getName() + "', " + products.get(i).getPrice() + ", " + products.get(i).getQuantity() + ", '" + products.get(i).getProvider() + "')");
 					statement.executeUpdate("insert into inventory values(" + products.get(i).getId() + ", '" + products.get(i).getName() + "', " + products.get(i).getPrice() + ", " + products.get(i).getQuantity() + ", '" + products.get(i).getProvider() + "')");
 					System.out.println("reached");
-					//listModel.addElement(products.get(i).getId()+": "+products.get(i).getName()+" $"+products.get(i).getPrice()+", "+products.get(i).getQuantity()+" in stock, ("+products.get(i).getProvider()+")");
 	      }
-				ResultSet rs = statement.executeQuery("select * from inventory");
-				while(rs.next()){
-					System.out.println("name = " + rs.getString("name"));
-					//System.out.println("id = " + rs.getInt("id"));
-				}
 			}
 			catch(SQLException e){
 				System.err.println(e.getMessage());
@@ -111,7 +89,6 @@ public class Main {
 
 
 	public static void main(String[] args) {
-		//System.out.print("start");
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				new Main().startProgram();

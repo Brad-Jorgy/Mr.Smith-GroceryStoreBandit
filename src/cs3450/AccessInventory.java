@@ -80,17 +80,69 @@ class Product{
 interface DataAccess{
   public void saveProduct(Product product);
   public Product loadProduct(int id);
-  public void saveAllProducts(Product[] products);
+  public void saveNewProduct(Product product);
   public ArrayList<Product> loadAllProducts();
+  public void deleteProduct(Product product);
 };
 
 class sqliteAdapter implements DataAccess{
-  public void saveProduct(Product product){  }
-  public Product loadProduct(int id){
-    Product asdf = new Product(1,"Asd",2.1,5,"BEN");
-    return asdf;
+  public void saveProduct(Product product){
+    Connection connection = null;
+    try{
+        connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+        Statement statement = connection.createStatement();
+        statement.setQueryTimeout(30);
+        ResultSet rs = statement.executeQuery("update inventory set name='"+product.getName()+"', price="+product.getPrice()+", quantity="+product.getQuantity()+", provider='"+product.getProvider()+"' where itemId="+product.getId());
+        Main.showMainScreen();
+        Main.showInventoryScreen();
+    }
+    catch(SQLException e){
+      System.err.println(e.getMessage());
+    }
   }
-  public void saveAllProducts(Product[] products){}
+  public Product loadProduct(int id){
+    Connection connection = null;
+    Product empty = new Product(0,"Empty",0,0,"Empty");
+    try{
+      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from inventory");
+      rs.next();
+      int maxCount = rs.getInt(1);
+      //System.out.println("maxCount: "+maxCount);
+      if(id > maxCount || id < 1){
+        System.out.println("Invalid itemId");
+      }
+      else{
+        rs = statement.executeQuery("select * from inventory where itemId="+id);
+        return new Product(id, rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider"));
+      }
+    }
+    catch(SQLException e){
+      System.err.println(e.getMessage());
+    }
+    return empty;
+  }
+
+  public void saveNewProduct(Product product){
+    Connection connection = null;
+    try{
+      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from inventory");
+      rs.next();
+      int maxCount = rs.getInt(1);
+      //				statement.executeUpdate("create table if not exists inventory (itemId integer, name string, price double, quantity integer, provider string)");
+      //					statement.executeUpdate("insert into inventory values(" + products.get(i).getId() + ", '" + products.get(i).getName() + "', " + products.get(i).getPrice() + ", " + products.get(i).getQuantity() + ", '" + products.get(i).getProvider() + "')");
+      rs = statement.executeQuery("insert into inventory values(" + (maxCount + 1) + ", '" + product.getName() + "', " + product.getPrice() + ", " + product.getQuantity() + ", '" + product.getProvider() + "')");
+    }
+    catch(SQLException e){
+      System.err.println(e.getMessage());
+    }
+  }
+
   public ArrayList<Product> loadAllProducts(){
     Connection connection = null;
     ArrayList<Product> products = new ArrayList<Product>();
@@ -101,8 +153,6 @@ class sqliteAdapter implements DataAccess{
       ResultSet rs = statement.executeQuery("select * from inventory");
       while(rs.next()){
         products.add(new Product(rs.getInt("itemId"), rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider")));
-        System.out.println("name = " + rs.getString("name"));
-        //System.out.println("id = " + rs.getInt("id"));
       }
     }
     catch(SQLException e){
@@ -110,15 +160,29 @@ class sqliteAdapter implements DataAccess{
     }
     return products;
   }
+
+  public void deleteProduct(Product product){
+    Connection connection = null;
+    try {
+      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("delete from inventory where itemId="+product.getId());
+    }
+    catch(SQLException e){
+      System.err.println(e.getMessage());
+    }
+  }
 };
 
 class XLSAdapter implements DataAccess{
+  public void deleteProduct(Product product) { }
   public void saveProduct(Product product){  }
   public Product loadProduct(int id){
     Product asdf = new Product(1,"Asd",2.1,5,"BEN");
     return asdf;
   }
-  public void saveAllProducts(Product[] products){}
+  public void saveNewProduct(Product product){}
   public ArrayList<Product> loadAllProducts(){
     ArrayList<Product> products = new ArrayList<Product>();
     try{
