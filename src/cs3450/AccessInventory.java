@@ -186,7 +186,7 @@ class XLSAdapter implements DataAccess{
   public ArrayList<Product> loadAllProducts(){
     ArrayList<Product> products = new ArrayList<Product>();
     try{
-      FileInputStream file = new FileInputStream(new File("..\\bin\\sampleInventory.xlsx"));
+      FileInputStream file = new FileInputStream(new File("C:\\Users\\bradt\\Mr.Smith-Grocery\\bin\\sampleInventory.xlsx"));
       XSSFWorkbook workbook = new XSSFWorkbook(file);
       XSSFSheet sheet = workbook.getSheetAt(0);
       Iterator<Row> rowIter = sheet.iterator();
