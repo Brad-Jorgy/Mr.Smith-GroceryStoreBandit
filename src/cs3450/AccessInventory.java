@@ -85,6 +85,32 @@ interface DataAccess{
   public void deleteProduct(Product product);
 };
 
+interface SearchData{
+  public ResultSet findProduct(int Id);
+};
+
+class sqlSearchAdapter implements SearchData{
+  public ResultSet findProduct(int Id){
+    Connection connection = null;
+    try{
+      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      //ResultSet rs = statement.executeQuery("select * from inventory where name glob "+"'Id'");
+      //ResultSet rs = statement.executeQuery("select * from inventory where name='" + Id +"'");
+      ResultSet rs = statement.executeQuery("select * from inventory where itemId="+Id);
+
+
+      //Main.showCheckoutScreen();
+      return rs;
+    }
+    catch(SQLException e){
+      System.err.println(e.getMessage());
+      return null;
+    }
+  }
+}
+
 class sqliteAdapter implements DataAccess{
   public void saveProduct(Product product){
     Connection connection = null;
@@ -178,6 +204,7 @@ class sqliteAdapter implements DataAccess{
 class XLSAdapter implements DataAccess{
   public void deleteProduct(Product product) { }
   public void saveProduct(Product product){  }
+ // public ResultSet findProduct(String Id){return null}
   public Product loadProduct(int id){
     Product asdf = new Product(1,"Asd",2.1,5,"BEN");
     return asdf;

@@ -7,7 +7,9 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.ResultSet;
 import java.util.concurrent.TimeUnit;
+import static cs3450.SearchData.*;
 
 import static cs3450.InventoryScreen.areValuesValid;
 import static cs3450.InventoryScreen.updateInventoryScreen;
@@ -19,8 +21,8 @@ public class CheckoutScreen {
     public static void addComponentsToPane(Container pane) {
         JButton backBtn = new JButton("Back to Main Screen");
         JLabel title = new JLabel("Check Out", SwingConstants.CENTER);
-        JButton addItemBtn = new JButton("Add Item To Queue");
-        JButton deleteBtn = new JButton("Delete Item From Queue");
+        JButton addItemBtn = new JButton("Add Item To Basket");
+        JButton deleteBtn = new JButton("Delete Item From Basket");
         JButton checkoutBtn = new JButton("Check Out and Pay");
         DefaultListModel listModel = new DefaultListModel();
         JList list = new JList(listModel);
@@ -84,23 +86,18 @@ public class CheckoutScreen {
             JPanel popupPanel = new JPanel();
             popupPanel.setLayout(new GridLayout(5,2));
             JTextField nameTF = new JTextField();
-            JTextField priceTF = new JTextField();
+            //JTextField priceTF = new JTextField();
             JTextField quantityTF = new JTextField();
-            JTextField providerTF = new JTextField();
+            //JTextField providerTF = new JTextField();
             popupPanel.add(new JLabel("Name: "));
             popupPanel.add(nameTF);
             popupPanel.add(new JLabel("Quantity: "));
             popupPanel.add(quantityTF);
-            int result = JOptionPane.showConfirmDialog(null, popupPanel, "Add Product:", JOptionPane.OK_CANCEL_OPTION);
-            if(result ==JOptionPane.OK_OPTION){
-                if(areValuesValid(priceTF.getText(), quantityTF.getText())){
-                    DataAccess db = new sqliteAdapter();
-                    Product product = new Product(9867, nameTF.getText(), Double.parseDouble(priceTF.getText()), Integer.parseInt(quantityTF.getText()), providerTF.getText());
-                    db.saveNewProduct(product);
-                }
-                else{
-                    System.out.println("Fail save new product.");
-                }
+            int result = JOptionPane.showConfirmDialog(null, popupPanel, "Add To Basket:", JOptionPane.OK_CANCEL_OPTION);
+            if(result ==JOptionPane.OK_OPTION) {
+                SearchData db = new sqlSearchAdapter();
+                ResultSet found = db.findProduct(Integer.parseInt(nameTF.getText()));
+
             }
             updateCheckoutScreen();
         }
@@ -112,7 +109,8 @@ public class CheckoutScreen {
         catch(InterruptedException e){
             System.err.println(e.getMessage());
         }
-        Main.showCheckoutScreen();
+        //Main.showCheckoutScreen();
+        Main.updateFrame();
     }
     }
 
