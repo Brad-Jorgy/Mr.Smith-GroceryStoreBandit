@@ -30,6 +30,7 @@ public class Main {
 				Statement statement = connection.createStatement();
 				statement.setQueryTimeout(30);
 				statement.executeUpdate("create table if not exists inventory (itemId integer, name string, price double, quantity integer, provider string)");
+				//add other tables here.
 				DataAccess db = new XLSAdapter();
 	      ArrayList<Product> products = db.loadAllProducts();
 	      for(int i = 0; i < products.size(); i++){
@@ -86,7 +87,6 @@ public class Main {
 		PaymentScreen.addComponentsToPane(frame.getContentPane());
 		updateFrame();
 	}
-
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable(){
