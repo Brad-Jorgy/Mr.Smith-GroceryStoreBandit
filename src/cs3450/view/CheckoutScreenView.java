@@ -1,4 +1,4 @@
-package cs3450;
+package cs3450.view;
 
 import java.awt.*;
 
@@ -9,14 +9,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.util.concurrent.TimeUnit;
-import static cs3450.SearchData.*;
 
-import static cs3450.InventoryScreen.areValuesValid;
-import static cs3450.InventoryScreen.updateInventoryScreen;
-import static cs3450.Main.updateFrame;
+//import static cs3450.InventoryScreen.areValuesValid;
+//import static cs3450.InventoryScreen.updateInventoryScreen;
+//import static cs3450.Main.updateFrame;
 //import static cs3450.PaymentScreen.frame;
 
-public class CheckoutScreen {
+import cs3450.model.DataAccess;
+import cs3450.model.SQLiteAdapter;
+import cs3450.model.Product;
+import cs3450.control.MainScreenControl;
+import cs3450.control.CheckoutScreenControl;
+
+public class CheckoutScreenView {
 
     public static void addComponentsToPane(Container pane) {
         JButton backBtn = new JButton("Back to Main Screen");
@@ -39,11 +44,10 @@ public class CheckoutScreen {
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 7;
-        //c.gridheight = 1;
 
         backBtn.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                Main.showMainScreen();
+                MainScreenControl.showMainScreen();
             }
         });
 
@@ -70,50 +74,15 @@ public class CheckoutScreen {
 
         checkoutBtn.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                Main.showPaymentScreen();
+                CheckoutScreenControl.showPaymentScreen(MainScreenControl.getFrame());
             }
         });
 
         addItemBtn.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                showAddItemInQueue();
+                CheckoutScreenControl.showAddItemInQueue();
             }
         });
     }
 
-
-        static public void showAddItemInQueue(){
-            JPanel popupPanel = new JPanel();
-            popupPanel.setLayout(new GridLayout(5,2));
-            JTextField nameTF = new JTextField();
-            //JTextField priceTF = new JTextField();
-            JTextField quantityTF = new JTextField();
-            //JTextField providerTF = new JTextField();
-            popupPanel.add(new JLabel("Name: "));
-            popupPanel.add(nameTF);
-            popupPanel.add(new JLabel("Quantity: "));
-            popupPanel.add(quantityTF);
-            int result = JOptionPane.showConfirmDialog(null, popupPanel, "Add To Basket:", JOptionPane.OK_CANCEL_OPTION);
-            if(result ==JOptionPane.OK_OPTION) {
-                SearchData db = new sqlSearchAdapter();
-                ResultSet found = db.findProduct(Integer.parseInt(nameTF.getText()));
-
-            }
-            updateCheckoutScreen();
-        }
-
-    static public void updateCheckoutScreen(){
-        try{
-            TimeUnit.SECONDS.sleep(1);
-        }
-        catch(InterruptedException e){
-            System.err.println(e.getMessage());
-        }
-        //Main.showCheckoutScreen();
-        Main.updateFrame();
-    }
-    }
-
-
-
-
+};

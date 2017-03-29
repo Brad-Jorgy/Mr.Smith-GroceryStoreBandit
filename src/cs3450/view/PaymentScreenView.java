@@ -1,4 +1,4 @@
-package cs3450;
+package cs3450.view;
 
 import java.awt.*;
 
@@ -8,7 +8,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class PaymentScreen {
+import cs3450.model.DataAccess;
+import cs3450.model.SQLiteAdapter;
+import cs3450.model.Product;
+import cs3450.control.MainScreenControl;
+
+public class PaymentScreenView {
 
 
     public static void addComponentsToPane(Container pane)
@@ -32,7 +37,7 @@ public class PaymentScreen {
 
         cancelBtn.addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent e) {
-                Main.showCheckoutScreen();
+                MainScreenControl.showCheckoutScreen();
             }
         });
 
