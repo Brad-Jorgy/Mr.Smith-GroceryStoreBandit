@@ -1,81 +1,25 @@
-package cs3450;
+package cs3450.control;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import com.mongodb.MongoClient;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 
-public class InventoryScreen {
-    public static void addComponentsToPane(Container pane)
-    {
-      JLabel title = new JLabel("Inventory", SwingConstants.CENTER);
-      DefaultListModel listModel = new DefaultListModel();
-      JButton backBtn = new JButton("Back to Main Screen");
-      JButton deleteBtn = new JButton("Delete Selected Product");
-      JButton updateBtn = new JButton("Update Selected Product");
-      JButton addBtn = new JButton("Add Product");
-      DataAccess db = new sqliteAdapter();
+import cs3450.model.Product;
+import cs3450.model.DataAccess;
+import cs3450.model.SQLiteAdapter;
 
-      // DataAccess db = new XLSAdapter();
-      ArrayList<Product> products = db.loadAllProducts();
-      for(int i = 0; i < products.size(); i++){
-        listModel.addElement(products.get(i).getId()+": "+products.get(i).getName()+" $"+products.get(i).getPrice()+", "+products.get(i).getQuantity()+" in stock, ("+products.get(i).getProvider()+")");
-      }
-      JList list = new JList(listModel);
-      list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      list.setSelectedIndex(0);
-      list.setVisibleRowCount(5);
-      list.setLayoutOrientation(JList.VERTICAL);
-      JScrollPane listScrollPane = new JScrollPane(list);
-      pane.setLayout(new GridBagLayout());
-      GridBagConstraints c = new GridBagConstraints();
-      c.fill = GridBagConstraints.BOTH;
-      c.weightx = 1;
-      c.weighty = 1;
-      c.gridx = 0;
-      c.gridy = 0;
-      c.gridwidth = 4;
-      backBtn.addMouseListener(new MouseAdapter(){
-        public void mousePressed(MouseEvent e) {
-          Main.showMainScreen();
-        }
-      });
-      deleteBtn.addMouseListener(new MouseAdapter(){
-        public void mousePressed(MouseEvent e){
-            showDeleteProductPopup(products.get(list.getSelectedIndex()));
-        }
-      });
-      updateBtn.addMouseListener(new MouseAdapter(){
-        public void mousePressed(MouseEvent e){
-            showUpdateProductPopup(products.get(list.getSelectedIndex()));
-        }
-      });
-      addBtn.addMouseListener(new MouseAdapter(){
-        public void mousePressed(MouseEvent e){
-          showAddProductPopup();
-        }
-      });
-      pane.add(title, c);
-      c.gridx = 0;
-      c.gridy = 1;
-      pane.add(listScrollPane, c);
-      c.gridx = 0;
-      c.gridy = 2;
-      c.gridwidth = 1;
-      pane.add(backBtn, c);
-      c.gridx = 1;
-      pane.add(deleteBtn, c);
-      c.gridx = 2;
-      pane.add(updateBtn, c);
-      c.gridx = 3;
-      pane.add(addBtn, c);
-    }
+public class InventoryScreenControl{
 
-    static public void showUpdateProductPopup(Product product){
+  static public ArrayList<Product> getInventoryProducts(){
+    //DataAccess db = Main.getSQLiteAccess();
+    return Main.getSQLiteAccess().loadAllProducts();
+  }
+
+  static public void showUpdateProductPopup(Product product){
       JPanel popupPanel = new JPanel();
       popupPanel.setLayout(new GridLayout(5,2));
       JTextField nameTF = new JTextField(product.getName());
@@ -95,7 +39,7 @@ public class InventoryScreen {
       int result = JOptionPane.showConfirmDialog(null, popupPanel, "Update Product:", JOptionPane.OK_CANCEL_OPTION);
       if(result ==JOptionPane.OK_OPTION){
         if(areValuesValid(priceTF.getText(), quantityTF.getText())){
-          DataAccess db = new sqliteAdapter();
+          DataAccess db = Main.getSQLiteAccess();
           product.setName(nameTF.getText());
           product.setPrice(Double.parseDouble(priceTF.getText()));
           product.setQuantity(Integer.parseInt(quantityTF.getText()));
@@ -127,7 +71,7 @@ public class InventoryScreen {
       int result = JOptionPane.showConfirmDialog(null, popupPanel, "Add Product:", JOptionPane.OK_CANCEL_OPTION);
       if(result ==JOptionPane.OK_OPTION){
         if(areValuesValid(priceTF.getText(), quantityTF.getText())){
-          DataAccess db = new sqliteAdapter();
+          DataAccess db = Main.getSQLiteAccess();
           Product product = new Product(9867, nameTF.getText(), Double.parseDouble(priceTF.getText()), Integer.parseInt(quantityTF.getText()), providerTF.getText());
           db.saveNewProduct(product);
         }
@@ -158,7 +102,7 @@ public class InventoryScreen {
       int result = JOptionPane.showConfirmDialog(null, popupPanel, "Delete Product??", JOptionPane.YES_NO_OPTION);
       if(result ==JOptionPane.YES_OPTION){
         if(areValuesValid(priceTF.getText(), quantityTF.getText())){
-          DataAccess db = new sqliteAdapter();
+          DataAccess db = Main.getSQLiteAccess();
           db.deleteProduct(product);
         }
         else{
@@ -187,6 +131,6 @@ public class InventoryScreen {
       catch(InterruptedException e){
         System.err.println(e.getMessage());
       }
-      Main.showInventoryScreen();
+      MainScreenControl.showInventoryScreen();
     }
 }

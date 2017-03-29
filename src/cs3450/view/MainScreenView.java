@@ -1,4 +1,4 @@
-package cs3450;
+package cs3450.view;
 
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -12,7 +12,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class MainScreen {
+import cs3450.model.DataAccess;
+import cs3450.model.SQLiteAdapter;
+import cs3450.model.Product;
+import cs3450.control.MainScreenControl;
+
+public class MainScreenView {
     // private static JButton checkoutBtn = new JButton("Checkout");
     // private static JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
     // private static JButton inventoryBtn = new JButton("Inventory");
@@ -34,15 +39,13 @@ public class MainScreen {
 
 				inventoryBtn.addMouseListener(new MouseAdapter(){
 					public void mousePressed(MouseEvent e) {
-						Main.showInventoryScreen();
-						//System.out.print("clicked");
+						MainScreenControl.showInventoryScreen();
 					}
 				});
         checkoutBtn.addMouseListener(new MouseAdapter(){
-            public void mousePressed(MouseEvent e) {
-                Main.showCheckoutScreen();
-                //System.out.print("clicked");
-            }
+          public void mousePressed(MouseEvent e) {
+            MainScreenControl.showCheckoutScreen();
+          }
         });
         pane.add(title, c);
         c.gridx = 1;
