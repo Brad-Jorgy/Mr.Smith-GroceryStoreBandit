@@ -41,46 +41,5 @@ public interface DataAccess{
   public void saveNewProduct(Product product);
   public ArrayList<Product> loadAllProducts();
   public void deleteProduct(Product product);
-  //public ResultSet findProduct(int id);
+  public boolean isValidProductId(int id);
 };
-
-// class XLSAdapter implements DataAccess{
-//   public void deleteProduct(Product product) { }
-//   public void saveProduct(Product product){  }
-//   public ResultSet findProduct(int id){return null;}
-//   public Product loadProduct(int id){
-//     Product asdf = new Product(1,"Asd",2.1,5,"BEN");
-//     return asdf;
-//   }
-//   public void saveNewProduct(Product product){}
-//   public ArrayList<Product> loadAllProducts(){
-//     ArrayList<Product> products = new ArrayList<Product>();
-//     try{
-//       FileInputStream file = new FileInputStream(new File("C:\\Users\\bradt\\Mr.Smith-Grocery\\bin\\sampleInventory.xlsx"));
-//       XSSFWorkbook workbook = new XSSFWorkbook(file);
-//       XSSFSheet sheet = workbook.getSheetAt(0);
-//       Iterator<Row> rowIter = sheet.iterator();
-//       Row row = rowIter.next(); //Grabbing first row of titles.
-//       while(rowIter.hasNext()){
-//         row = rowIter.next();
-//         Iterator<Cell> cellIter = row.cellIterator();
-//         Cell cell = cellIter.next();
-//         int id = (int)cell.getNumericCellValue();
-//         cell = cellIter.next();
-//         String name = cell.getStringCellValue();
-//         cell = cellIter.next();
-//         double price = cell.getNumericCellValue();
-//         cell = cellIter.next();
-//         int quantity = (int)cell.getNumericCellValue();
-//         cell = cellIter.next();
-//         String provider = cell.getStringCellValue();
-//         products.add(new Product(id, name, price, quantity, provider));
-//       }
-//       file.close();
-//     }
-//     catch(Exception e){
-//       e.printStackTrace();
-//     }
-//     return products;
-//   }
-// };
