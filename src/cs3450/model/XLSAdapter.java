@@ -40,6 +40,8 @@ public class XLSAdapter implements DataAccess{
     return asdf;
   }
   public void saveNewProduct(Product product){}
+  public int saveNewCustomer(Customer customer) {return 0;}
+  public int saveNewOrder(Order order){return 0;}
   public ArrayList<Product> loadAllProducts(){
     ArrayList<Product> products = new ArrayList<Product>();
     try{

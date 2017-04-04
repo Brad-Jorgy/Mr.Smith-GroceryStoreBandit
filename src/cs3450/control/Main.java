@@ -11,22 +11,20 @@ import java.io.File;
 
 import javax.swing.JFrame;
 
-import cs3450.model.DataAccess;
-import cs3450.model.InitSQLite;
-import cs3450.model.SQLiteAdapter;
-import cs3450.model.XLSAdapter;
-import cs3450.model.Product;
+import cs3450.model.*;
 import cs3450.view.MainScreenView;
 import cs3450.view.CheckoutScreenView;
 import cs3450.view.InventoryScreenView;
 import cs3450.view.PaymentScreenView;
+import java.sql.Connection;
 
 public class Main {
 	private static DataAccess sqliteAccess;
+	private static Connection connection;
 
 	public static void startProgram()
 	{
-		InitSQLite.setupDatabaseIfNotSetup();
+		connection = InitSQLite.setupDatabaseIfNotSetup();
 		try{
       sqliteAccess = new SQLiteAdapter();
     }
@@ -43,6 +41,10 @@ public class Main {
 				//new Main().startProgram();
 		//}});
 		startProgram();
+	}
+
+	public static Connection getDbConnection() {
+		return connection;
 	}
 
 	public static DataAccess getSQLiteAccess(){

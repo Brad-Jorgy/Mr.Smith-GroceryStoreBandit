@@ -13,22 +13,25 @@ import javax.swing.JFrame;
 import cs3450.view.MainScreenView;
 import cs3450.view.InventoryScreenView;
 import cs3450.view.CheckoutScreenView;
+import cs3450.model.Order;
 
 public class MainScreenControl{
   private static JFrame frame = new JFrame("Store Management System");
+
+  private static final Order currentOrder = new Order();
 
   MainScreenControl(){
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setSize(new Dimension(1000,550));
-		MainScreenView.addComponentsToPane(frame.getContentPane());
+		MainScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
   }
   public static void showMainScreen()
 	{
 		frame.getContentPane().removeAll();
-		MainScreenView.addComponentsToPane(frame.getContentPane());
+		MainScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
 		updateFrame();
 	}
 
@@ -45,13 +48,15 @@ public class MainScreenControl{
 	public static void showCheckoutScreen()
 	{
 		frame.getContentPane().removeAll();
-		CheckoutScreenView.addComponentsToPane(frame.getContentPane());
+		CheckoutScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
 		updateFrame();
 	}
-  public static void updateFrame(){
+
+  	public static void updateFrame(){
 		frame.getContentPane().repaint();
 		frame.getContentPane().revalidate();
 	}
-  public static JFrame getFrame(){ return frame; }
+
+	public static JFrame getFrame(){ return frame; }
   //public static DataAccess getSQLiteAccess(){ return sqliteAccess; }
 };

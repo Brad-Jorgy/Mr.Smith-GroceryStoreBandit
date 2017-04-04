@@ -39,6 +39,8 @@ public interface DataAccess{
   public void saveProduct(Product product);
   public Product loadProduct(int id);
   public void saveNewProduct(Product product);
+  public int saveNewOrder(Order order);
+  public int saveNewCustomer(Customer customer);
   public ArrayList<Product> loadAllProducts();
   public void deleteProduct(Product product);
   public boolean isValidProductId(int id);
