@@ -8,14 +8,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 import cs3450.model.DataAccess;
 import cs3450.model.SQLiteAdapter;
 import cs3450.model.Product;
 import cs3450.control.MainScreenControl;
+import cs3450.model.Order;
 
 public class MainScreenView {
     public static void addComponentsToPane(Container pane)
@@ -26,6 +25,7 @@ public class MainScreenView {
         JButton profileBtn = new JButton("Profile");
         JButton returnBtn = new JButton("Return Item");
         JButton employeeBtn = new JButton("Employees");
+
         pane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -36,16 +36,20 @@ public class MainScreenView {
         c.gridwidth = 1;
         c.gridheight = 1;
 
-				inventoryBtn.addMouseListener(new MouseAdapter(){
-					public void mousePressed(MouseEvent e) {
-						MainScreenControl.showInventoryScreen();
-					}
-				});
-        checkoutBtn.addMouseListener(new MouseAdapter(){
-          public void mousePressed(MouseEvent e) {
-            MainScreenControl.showCheckoutScreen();
-          }
+		inventoryBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainScreenControl.showInventoryScreen();
+            }
         });
+
+        checkoutBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainScreenControl.showCheckoutScreen();
+            }
+        });
+
         pane.add(title, c);
         c.gridx = 1;
         pane.add(profileBtn, c);

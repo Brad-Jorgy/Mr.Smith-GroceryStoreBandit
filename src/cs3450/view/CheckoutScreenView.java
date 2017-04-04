@@ -15,25 +15,43 @@ import java.util.concurrent.TimeUnit;
 //import static cs3450.Main.updateFrame;
 //import static cs3450.PaymentScreen.frame;
 
-import cs3450.model.DataAccess;
-import cs3450.model.SQLiteAdapter;
-import cs3450.model.Product;
+import cs3450.control.Main;
+import cs3450.model.*;
 import cs3450.control.MainScreenControl;
 import cs3450.control.CheckoutScreenControl;
+import java.util.List;
+import java.util.Iterator;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class CheckoutScreenView {
 
-    public static void addComponentsToPane(Container pane) {
+
+public class CheckoutScreenView{
+
+    public static void addComponentsToPane(Container pane, Order order) {
         JButton backBtn = new JButton("Back to Main Screen");
-        JLabel title = new JLabel("Check Out", SwingConstants.CENTER);
-        JButton addItemBtn = new JButton("Add Item To Basket");
-        JButton deleteBtn = new JButton("Delete Item From Basket");
-        JButton checkoutBtn = new JButton("Check Out and Pay");
+        JLabel title = new JLabel("Current Basket Contents", SwingConstants.CENTER);
+        JButton addItemBtn = new JButton("Add Item");
+        JButton deleteBtn = new JButton("Delete Item");
+        JButton checkoutBtn = new JButton("Check Out");
+        JButton editSaveOrderBtn = new JButton("Edit Quantity");
         DefaultListModel listModel = new DefaultListModel();
+        List<PurchaseItem> olist = order.getOrderList();
+        Iterator<PurchaseItem> orderIterator = olist.iterator();
+        while( orderIterator.hasNext()) {
+            PurchaseItem item = orderIterator.next();
+            listModel.addElement(item);
+//            listModel.addElement(item.getId()+": "+item.getProduct().getName() +" $"+item.getProduct().getPrice()+", "+item.getProduct().getQuantity()+" in stock, ("+item.getProduct().getProvider()+")");
+
+        }
         JList list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//        ListSelectionModel listSelectionModel = list.getSelectionModel();
+//        listSelectionModel.addListSelectionListener(
+//                new SharedListSelectionHandler());
         list.setSelectedIndex(0);
         list.setVisibleRowCount(5);
+
         pane.setLayout(new GridBagLayout());
         list.setLayoutOrientation(JList.VERTICAL);
         JScrollPane listInvenScrollPane = new JScrollPane(list);
@@ -44,18 +62,6 @@ public class CheckoutScreenView {
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 7;
-
-        backBtn.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                MainScreenControl.showMainScreen();
-            }
-        });
-
-        addItemBtn.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                // add item to queue.
-            }
-        });
 
         pane.add(title, c);
         c.gridx = 0;
@@ -71,16 +77,37 @@ public class CheckoutScreenView {
         pane.add(deleteBtn, c);
         c.gridx = 4;
         pane.add(checkoutBtn, c);
+        c.gridx = 5;
+        pane.add(editSaveOrderBtn, c);
+
+        backBtn.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+            MainScreenControl.showMainScreen();
+            }
+        });
+
+        editSaveOrderBtn.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+               CheckoutScreenControl.showEditOrderPopup(order, (PurchaseItem)list.getSelectedValue());
+            }
+        });
 
         checkoutBtn.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                CheckoutScreenControl.showPaymentScreen(MainScreenControl.getFrame());
+                CheckoutScreenControl.showPaymentScreen(MainScreenControl.getFrame(), order);
+            }
+        });
+
+        deleteBtn.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                order.removeItem(((PurchaseItem)list.getSelectedValue()).getProduct());
+                CheckoutScreenControl.updateCheckoutScreen(order);
             }
         });
 
         addItemBtn.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                CheckoutScreenControl.showAddItemInQueue();
+            CheckoutScreenControl.addItemToBasketPopup(order);
             }
         });
     }
