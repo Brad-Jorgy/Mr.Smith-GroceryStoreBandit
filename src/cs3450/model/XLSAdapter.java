@@ -70,4 +70,5 @@ public class XLSAdapter implements DataAccess{
     }
     return products;
   }
+  public boolean isValidProductId(int id){return true;}
 };

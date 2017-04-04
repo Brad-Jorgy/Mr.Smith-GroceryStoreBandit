@@ -157,16 +157,18 @@ public class SQLiteAdapter implements DataAccess{
     }
   }
 
-  // public ResultSet findProduct(int Id){
-  //   try{
-  //     Statement statement = mConn.createStatement();
-  //     statement.setQueryTimeout(30);
-  //     ResultSet rs = statement.executeQuery("select * from inventory where itemId="+Id);
-  //     return rs;
-  //   }
-  //   catch (SQLException e) {
-  //     System.out.println(e.getMessage());
-  //   }
-  //   return null;
-  // }
+  public boolean isValidProductId(int id){
+    Connection connection = null;
+    try{
+      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select * from inventory where itemId="+id);
+      return rs.next();
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return false;
+  }
 };
