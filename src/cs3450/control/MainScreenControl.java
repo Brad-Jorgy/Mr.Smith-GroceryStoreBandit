@@ -24,7 +24,7 @@ public class MainScreenControl{
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setSize(new Dimension(1000,550));
-		MainScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
+		MainScreenView.addComponentsToPane(frame.getContentPane());
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
   }
@@ -32,7 +32,7 @@ public class MainScreenControl{
 	{
     frame = LoginScreenControl.getFrame();
 		frame.getContentPane().removeAll();
-		MainScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
+		MainScreenView.addComponentsToPane(frame.getContentPane());
 		updateFrame();
 	}
 
