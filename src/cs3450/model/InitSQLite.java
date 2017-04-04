@@ -27,7 +27,9 @@ public class InitSQLite{
 					statement.executeUpdate("insert into inventory values(" + products.get(i).getId() + ", '" + products.get(i).getName() + "', " + products.get(i).getPrice() + ", " + products.get(i).getQuantity() + ", '" + products.get(i).getProvider() + "')");
 					System.out.println("reached");
 	      }
-			}
+        statement.executeUpdate("create table if not exists employees (employeeId integer, name string, image blob, username string, password string, position string)");
+        statement.executeUpdate("insert into employees values(1, 'New Manager', null, 'manager', '12345', 'Manager')");
+      }
 			catch(SQLException e){
 				System.err.println(e.getMessage());
 			}

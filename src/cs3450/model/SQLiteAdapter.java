@@ -171,4 +171,24 @@ public class SQLiteAdapter implements DataAccess{
     }
     return false;
   }
+
+  public void saveEmployee(Employee employee){}
+  public Employee loadEmployee(int id){return null;}
+  public void saveNewEmployee(Employee employee){}
+  public ArrayList<Employee> loadAllEmployees(){return null;}
+  public void deleteEmployee(Employee employee){}
+  public boolean isValidLoginInfo(String username, String password){
+    Connection connection = null;
+    try{
+      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select * from employees where username='" + username +"' and password='" + password + "'");
+      return rs.next();
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return false;
+  }
 };
