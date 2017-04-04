@@ -17,15 +17,15 @@ import cs3450.control.MainScreenControl;
 import cs3450.model.Order;
 
 public class MainScreenView {
-    // private static JButton checkoutBtn = new JButton("Checkout");
-    // private static JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
-    // private static JButton inventoryBtn = new JButton("Inventory");
-
-    public static void addComponentsToPane(Container pane, Order order)
+    public static void addComponentsToPane(Container pane)
     {
-		JButton checkoutBtn = new JButton("Checkout"); 
-	    JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
-		JButton inventoryBtn = new JButton("Inventory");
+				JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
+        JButton checkoutBtn = new JButton("Checkout");
+				JButton inventoryBtn = new JButton("Inventory");
+        JButton profileBtn = new JButton("Profile");
+        JButton returnBtn = new JButton("Return Item");
+        JButton employeeBtn = new JButton("Employees");
+
         pane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -33,7 +33,7 @@ public class MainScreenView {
         c.weighty = 100;
         c.gridx = 0;
         c.gridy = 0;
-        c.gridwidth = 6;
+        c.gridwidth = 1;
         c.gridheight = 1;
 
 		inventoryBtn.addActionListener(new ActionListener() {
@@ -52,12 +52,15 @@ public class MainScreenView {
 
         pane.add(title, c);
         c.gridx = 1;
+        pane.add(profileBtn, c);
         c.gridy = 1;
+        pane.add(returnBtn, c);
+        c.gridx = 0;
         pane.add(checkoutBtn, c);
-        c.gridx = 2;
         c.gridy = 2;
         pane.add(inventoryBtn, c);
-
+        c.gridx = 1;
+        pane.add(employeeBtn, c);
     }
 
 }

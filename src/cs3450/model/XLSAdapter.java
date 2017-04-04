@@ -45,7 +45,7 @@ public class XLSAdapter implements DataAccess{
   public ArrayList<Product> loadAllProducts(){
     ArrayList<Product> products = new ArrayList<Product>();
     try{
-      FileInputStream file = new FileInputStream(new File("C:\\Users\\bradt\\Mr.Smith-Grocery\\bin\\sampleInventory.xlsx"));
+      FileInputStream file = new FileInputStream(new File("..\\bin\\sampleInventory.xlsx"));
       XSSFWorkbook workbook = new XSSFWorkbook(file);
       XSSFSheet sheet = workbook.getSheetAt(0);
       Iterator<Row> rowIter = sheet.iterator();
@@ -73,4 +73,10 @@ public class XLSAdapter implements DataAccess{
     return products;
   }
   public boolean isValidProductId(int id){return true;}
+  public void saveEmployee(Employee employee){}
+  public Employee loadEmployee(int id){return null;}
+  public void saveNewEmployee(Employee employee){}
+  public ArrayList<Employee> loadAllEmployees(){return null;}
+  public void deleteEmployee(Employee employee){}
+  public boolean isValidLoginInfo(String username, String password){return false;}
 };

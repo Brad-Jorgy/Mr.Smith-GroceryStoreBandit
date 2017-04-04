@@ -16,6 +16,7 @@ import cs3450.view.MainScreenView;
 import cs3450.view.CheckoutScreenView;
 import cs3450.view.InventoryScreenView;
 import cs3450.view.PaymentScreenView;
+import cs3450.view.LoginScreenView;
 import java.sql.Connection;
 
 public class Main {
@@ -31,7 +32,8 @@ public class Main {
     catch(ClassNotFoundException e){
 			System.out.println(e.getMessage());
     }
-		new MainScreenControl();
+		new LoginScreenControl();
+		//new MainScreenControl();
 		//System.out.println(getSQLiteAccess().toString());
 	}
 

@@ -44,4 +44,11 @@ public interface DataAccess{
   public ArrayList<Product> loadAllProducts();
   public void deleteProduct(Product product);
   public boolean isValidProductId(int id);
+
+  public void saveEmployee(Employee employee);
+  public Employee loadEmployee(int id);
+  public void saveNewEmployee(Employee employee);
+  public ArrayList<Employee> loadAllEmployees();
+  public void deleteEmployee(Employee employee);
+  public boolean isValidLoginInfo(String username, String password);
 };

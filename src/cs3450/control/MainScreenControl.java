@@ -30,6 +30,7 @@ public class MainScreenControl{
   }
   public static void showMainScreen()
 	{
+    frame = LoginScreenControl.getFrame();
 		frame.getContentPane().removeAll();
 		MainScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
 		updateFrame();
