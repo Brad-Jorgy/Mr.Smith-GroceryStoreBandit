@@ -14,10 +14,11 @@ import cs3450.view.MainScreenView;
 import cs3450.view.InventoryScreenView;
 import cs3450.view.CheckoutScreenView;
 import cs3450.model.Order;
+import cs3450.model.Employee;
 
 public class MainScreenControl{
   private static JFrame frame = new JFrame("Store Management System");
-
+  private static Employee currEmployee = null;
   private static final Order currentOrder = new Order();
 
   MainScreenControl(){
@@ -35,15 +36,20 @@ public class MainScreenControl{
 		MainScreenView.addComponentsToPane(frame.getContentPane());
 		updateFrame();
 	}
+  public static void showMainScreen(Employee employee)
+	{
+    currEmployee = employee;
+    frame = LoginScreenControl.getFrame();
+		frame.getContentPane().removeAll();
+		MainScreenView.addComponentsToPane(frame.getContentPane());
+		updateFrame();
+	}
 
 	public static void showInventoryScreen()
 	{
 		frame.getContentPane().removeAll();
-    //System.out.println(Main.getSQLiteAccess().toString());
 		InventoryScreenView.addComponentsToPane(frame.getContentPane());
-    //System.out.println(Main.getSQLiteAccess().toString());
 		updateFrame();
-    //System.out.println(Main.getSQLiteAccess().toString());
 	}
 
 	public static void showCheckoutScreen()
@@ -57,6 +63,18 @@ public class MainScreenControl{
 		frame.getContentPane().repaint();
 		frame.getContentPane().revalidate();
 	}
+
+  public static boolean isCurrEmployeeManager(){
+    if(currEmployee == null)
+      return false;
+    if("Manager".equals(currEmployee.getPosition())){
+      return true;
+    }
+    return false;
+  }
+  public static String getCurrEmployeeName(){
+    return currEmployee.getName();
+  }
 
 	public static JFrame getFrame(){ return frame; }
   //public static DataAccess getSQLiteAccess(){ return sqliteAccess; }

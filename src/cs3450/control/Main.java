@@ -33,15 +33,9 @@ public class Main {
 			System.out.println(e.getMessage());
     }
 		new LoginScreenControl();
-		//new MainScreenControl();
-		//System.out.println(getSQLiteAccess().toString());
 	}
 
 	public static void main(String[] args) {
-		//SwingUtilities.invokeLater(new Runnable(){
-		//	public void run(){
-				//new Main().startProgram();
-		//}});
 		startProgram();
 	}
 

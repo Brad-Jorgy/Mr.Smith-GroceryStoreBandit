@@ -50,5 +50,5 @@ public interface DataAccess{
   public void saveNewEmployee(Employee employee);
   public ArrayList<Employee> loadAllEmployees();
   public void deleteEmployee(Employee employee);
-  public boolean isValidLoginInfo(String username, String password);
+  public int getUserId(String username, String password);
 };

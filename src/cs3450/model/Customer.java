@@ -1,6 +1,5 @@
 package cs3450.model;
 
-
 public class Customer {
     private int customerId;
     private int orderId;
@@ -42,7 +41,6 @@ public class Customer {
     public void setCountry(String country){ this.country = country; }
     public int getOrderId() { return this.orderId; }
     public void setOrderId(int oId) { this.orderId = oId; }
-
 
 //    @Override
 //    public String toString() {

@@ -34,7 +34,6 @@ import cs3450.control.Main;
 public class XLSAdapter implements DataAccess{
   public void deleteProduct(Product product) { }
   public void saveProduct(Product product){  }
-  //public ResultSet findProduct(int id){return null;}
   public Product loadProduct(int id){
     Product asdf = new Product(1,"Asd",2.1,5,"BEN");
     return asdf;
@@ -78,5 +77,5 @@ public class XLSAdapter implements DataAccess{
   public void saveNewEmployee(Employee employee){}
   public ArrayList<Employee> loadAllEmployees(){return null;}
   public void deleteEmployee(Employee employee){}
-  public boolean isValidLoginInfo(String username, String password){return false;}
+  public int getUserId(String username, String password){return -1;}
 };

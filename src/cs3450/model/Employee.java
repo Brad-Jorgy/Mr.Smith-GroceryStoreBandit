@@ -1,13 +1,15 @@
 package cs3450.model;
 
+import java.io.InputStream;
+
 public class Employee{
   private int employeeId;
   private String name;
-  private byte[] image;
+  private InputStream image;
   private String username;
   private String password;
   private String position;
-  public Employee(int id, String name, byte[] image, String username, String password, String position){
+  public Employee(int id, String name, InputStream image, String username, String password, String position){
     this.employeeId = id;
     this.name = name;
     this.image = image;
@@ -19,8 +21,8 @@ public class Employee{
   public void setId(int id){ this.employeeId = id; }
   public String getName(){ return this.name; }
   public void setName(String name){ this.name = name; }
-  public byte[] getImage(){ return this.image; }
-  public void setImage(byte[] image){ this.image = image; }
+  public InputStream getImage(){ return this.image; }
+  public void setImage(InputStream image){ this.image = image; }
   public String getUsername(){ return this.username; }
   public void setUsername(String username){ this.username = username; }
   public String getPassword(){ return this.password; }

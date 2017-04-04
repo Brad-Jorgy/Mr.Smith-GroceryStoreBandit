@@ -33,37 +33,13 @@ public class LoginScreenControl{
 		frame.setVisible(true);
   }
 
-  public static boolean isValidUserInfo(String username, String password){
+  public static int getUserId(String username, String password){
     DataAccess db = Main.getSQLiteAccess();
-    return db.isValidLoginInfo(username, password);
+    return db.getUserId(username, password);
   }
-  // public static void showMainScreen()
-	// {
-	// 	frame.getContentPane().removeAll();
-	// 	MainScreenView.addComponentsToPane(frame.getContentPane());
-	// 	updateFrame();
-	// }
-  //
-	// public static void showInventoryScreen()
-	// {
-	// 	frame.getContentPane().removeAll();
-  //   //System.out.println(Main.getSQLiteAccess().toString());
-	// 	InventoryScreenView.addComponentsToPane(frame.getContentPane());
-  //   //System.out.println(Main.getSQLiteAccess().toString());
-	// 	updateFrame();
-  //   //System.out.println(Main.getSQLiteAccess().toString());
-	// }
-  //
-	// public static void showCheckoutScreen()
-	// {
-	// 	frame.getContentPane().removeAll();
-	// 	CheckoutScreenView.addComponentsToPane(frame.getContentPane());
-	// 	updateFrame();
-	// }
-  // public static void updateFrame(){
-	// 	frame.getContentPane().repaint();
-	// 	frame.getContentPane().revalidate();
-	// }
-  // public static JFrame getFrame(){ return frame; }
-  // //public static DataAccess getSQLiteAccess(){ return sqliteAccess; }
+
+  public static Employee loadEmployee(int id){
+    DataAccess db = Main.getSQLiteAccess();
+    return db.loadEmployee(id);
+  }
 };
