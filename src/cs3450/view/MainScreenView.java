@@ -8,25 +8,24 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 import cs3450.model.DataAccess;
 import cs3450.model.SQLiteAdapter;
 import cs3450.model.Product;
 import cs3450.control.MainScreenControl;
+import cs3450.model.Order;
 
 public class MainScreenView {
     // private static JButton checkoutBtn = new JButton("Checkout");
     // private static JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
     // private static JButton inventoryBtn = new JButton("Inventory");
 
-    public static void addComponentsToPane(Container pane)
+    public static void addComponentsToPane(Container pane, Order order)
     {
-				JButton checkoutBtn = new JButton("Checkout");
-				JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
-				JButton inventoryBtn = new JButton("Inventory");
+		JButton checkoutBtn = new JButton("Checkout"); 
+	    JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
+		JButton inventoryBtn = new JButton("Inventory");
         pane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -37,16 +36,20 @@ public class MainScreenView {
         c.gridwidth = 6;
         c.gridheight = 1;
 
-				inventoryBtn.addMouseListener(new MouseAdapter(){
-					public void mousePressed(MouseEvent e) {
-						MainScreenControl.showInventoryScreen();
-					}
-				});
-        checkoutBtn.addMouseListener(new MouseAdapter(){
-          public void mousePressed(MouseEvent e) {
-            MainScreenControl.showCheckoutScreen();
-          }
+		inventoryBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainScreenControl.showInventoryScreen();
+            }
         });
+
+        checkoutBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainScreenControl.showCheckoutScreen();
+            }
+        });
+
         pane.add(title, c);
         c.gridx = 1;
         c.gridy = 1;
