@@ -48,6 +48,10 @@ public class ProfileScreenControl{
       return true;
     }
 
+    static public void logout(){
+      MainScreenControl.showLoginScreen();
+    }
+
     static public void updateProfileScreen(){
       try{
           TimeUnit.SECONDS.sleep(1);

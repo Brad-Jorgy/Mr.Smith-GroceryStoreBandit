@@ -71,6 +71,14 @@ public class MainScreenControl{
 		updateFrame();
   }
 
+  public static void showLoginScreen()
+  {
+      frame.getContentPane().removeAll();
+      currEmployee = null;
+      LoginScreenView.addComponentsToPane(frame.getContentPane());
+      updateFrame();
+  }
+
   public static void updateFrame(){
 		frame.getContentPane().repaint();
 		frame.getContentPane().revalidate();

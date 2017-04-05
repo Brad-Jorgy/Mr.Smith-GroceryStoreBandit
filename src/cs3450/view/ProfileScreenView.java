@@ -18,6 +18,7 @@ public class ProfileScreenView {
       DefaultListModel listModel = new DefaultListModel();
       JButton backBtn = new JButton("Back to Main Screen");
       JButton updateBtn = new JButton("Update Username and Password");
+      JButton logoutBtn = new JButton("Logout");
       Employee employee = MainScreenControl.getCurrEmployee();
 
       JPanel idPanel = new JPanel();
@@ -54,8 +55,13 @@ public class ProfileScreenView {
           ProfileScreenControl.showUpdateInfoPopup(employee);
         }
       });
+      logoutBtn.addMouseListener(new MouseAdapter(){
+        public void mousePressed(MouseEvent e){
+          ProfileScreenControl.logout();
+        }
+      });
 
-      pane.setLayout(new GridLayout(9,1));
+      pane.setLayout(new GridLayout(10,1));
       pane.add(new JLabel(" "));
       pane.add(title);
       pane.add(idPanel);
@@ -65,5 +71,6 @@ public class ProfileScreenView {
       pane.add(positionPanel);
       pane.add(updateBtn);
       pane.add(backBtn);
+      pane.add(logoutBtn);
     }
 }
