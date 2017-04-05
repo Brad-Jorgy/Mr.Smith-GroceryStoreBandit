@@ -47,12 +47,7 @@ public class LoginScreenView {
 
         loginBtn.addMouseListener(new MouseAdapter(){
 					public void mousePressed(MouseEvent e) {
-            int id = LoginScreenControl.getUserId(usernameTF.getText(), passwordTF.getText());
-						if(id > 0){
-              MainScreenControl.showMainScreen(LoginScreenControl.loadEmployee(id));
-            }
-            else
-              JOptionPane.showMessageDialog(null, "Invalid username / password combo.");
+            LoginScreenControl.attemptLogin(usernameTF.getText(), passwordTF.getText());
 					}
 				});
 

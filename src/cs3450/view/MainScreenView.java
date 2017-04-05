@@ -55,6 +55,13 @@ public class MainScreenView {
           employeeBtn.setEnabled(false);
         }
 
+        profileBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainScreenControl.showProfileScreen();
+            }
+        });
+
         checkoutBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -11,8 +11,6 @@ import java.util.*;
 import javax.swing.JFrame;
 
 import cs3450.view.*;
-//import cs3450.view.InventoryScreenView;
-//import cs3450.view.CheckoutScreenView;
 import cs3450.model.Order;
 import cs3450.model.Employee;
 
@@ -65,6 +63,14 @@ public class MainScreenControl{
 		EmployeeScreenView.addComponentsToPane(frame.getContentPane());
 		updateFrame();
   }
+
+  public static void showProfileScreen()
+  {
+    frame.getContentPane().removeAll();
+		ProfileScreenView.addComponentsToPane(frame.getContentPane());
+		updateFrame();
+  }
+
   public static void updateFrame(){
 		frame.getContentPane().repaint();
 		frame.getContentPane().revalidate();
@@ -80,6 +86,9 @@ public class MainScreenControl{
   }
   public static String getCurrEmployeeName(){
     return currEmployee.getName();
+  }
+  public static Employee getCurrEmployee(){
+    return currEmployee;
   }
 
 	public static JFrame getFrame(){ return frame; }
