@@ -10,11 +10,6 @@ import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.util.concurrent.TimeUnit;
 
-//import static cs3450.InventoryScreen.areValuesValid;
-//import static cs3450.InventoryScreen.updateInventoryScreen;
-//import static cs3450.Main.updateFrame;
-//import static cs3450.PaymentScreen.frame;
-
 import cs3450.control.Main;
 import cs3450.model.*;
 import cs3450.control.MainScreenControl;

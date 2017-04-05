@@ -15,7 +15,6 @@ import cs3450.model.SQLiteAdapter;
 public class InventoryScreenControl{
 
   static public ArrayList<Product> getInventoryProducts(){
-    //DataAccess db = Main.getSQLiteAccess();
     return Main.getSQLiteAccess().loadAllProducts();
   }
 

@@ -19,10 +19,6 @@ public class SQLiteAdapter implements DataAccess{
 	public SQLiteAdapter() throws ClassNotFoundException {
 		Class.forName("org.sqlite.JDBC");
 		mConn = connectToDatabase();
-    // if(mConn==null)
-    //   System.out.println("Null");
-    // else
-    //   System.out.println(mConn.toString());
 	}
 
   public String toString(){
@@ -37,43 +33,22 @@ public class SQLiteAdapter implements DataAccess{
 
 	private Connection connectToDatabase() {
 		Connection connection = null;
-//		try {
-			// db parameters
-//			String url = "jdbc:sqlite:cs3450.db";
-//			// create a connection to the database
-//			connection = DriverManager.getConnection(url);
-            connection = Main.getDbConnection();
-			System.out.println("Connection to SQLite has been established.");
-
-			return connection;
-//		} catch (SQLException e) {
-//			System.out.println(e.getMessage());
-//		} finally {
-//			try {
-//				if (connection != null) {
-//					connection.close();
-//				}
-//			} catch (SQLException e) {
-//				System.out.println(e.getMessage());
-//			}
-//		}
-//		return null;
+    connection = Main.getDbConnection();
+		System.out.println("Connection to SQLite has been established.");
+		return connection;
 	}
 
   public void saveProduct(Product product){
     Connection connection = null;
     try{
-//      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
-        connection = Main.getDbConnection();
+      connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
-      //Statement statement = mConn.createStatement();
       statement.setQueryTimeout(30);
       statement.executeUpdate("update inventory set name='"+product.getName()+"', price="+product.getPrice()+", quantity="+product.getQuantity()+", provider='"+product.getProvider()+"' where itemId="+product.getId());
     }
     catch (SQLException e) {
       System.out.println(e.getMessage());
     }
-//    MainScreenControl.showMainScreen();
     MainScreenControl.showInventoryScreen();
   }
 
@@ -82,10 +57,8 @@ public class SQLiteAdapter implements DataAccess{
   public void saveNewProduct(Product product){
     Connection connection = null;
     try{
-//      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
-        connection = Main.getDbConnection();
+      connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
-      //Statement statement = mConn.createStatement();
       statement.setQueryTimeout(30);
       ResultSet rs = statement.executeQuery("select count(*) from inventory");
       rs.next();
@@ -97,119 +70,103 @@ public class SQLiteAdapter implements DataAccess{
     }
   }
 
-    public int saveNewOrder(Order order){
-        Connection connection = null;
-        try{
-//            connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
-            connection = Main.getDbConnection();
-            Statement statement = connection.createStatement();
-            //Statement statement = mConn.createStatement();
-            statement.setQueryTimeout(30);
-            ResultSet rs = statement.executeQuery("select count(*) from orders");
-            rs.next();
-            int maxCount = rs.getInt(1);
-            List<PurchaseItem> olist = order.getOrderList();
-            Iterator<PurchaseItem> orderIterator = olist.iterator();
-            PurchaseItem item = null;
-            while( orderIterator.hasNext()) {
-                item = orderIterator.next();
-                statement.executeUpdate("insert into orders values(" + (maxCount + 1) + ", " + item.getId() + ", " + item.getQuantity() + ")");
-            }
-            return maxCount + 1;
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return -1;
+  public int saveNewOrder(Order order){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from orders");
+      rs.next();
+      int maxCount = rs.getInt(1);
+      List<PurchaseItem> olist = order.getOrderList();
+      Iterator<PurchaseItem> orderIterator = olist.iterator();
+      PurchaseItem item = null;
+      while( orderIterator.hasNext()) {
+          item = orderIterator.next();
+          statement.executeUpdate("insert into orders values(" + (maxCount + 1) + ", " + item.getId() + ", " + item.getQuantity() + ")");
+      }
+      return maxCount + 1;
     }
-
-    public int saveNewCustomer(Customer customer){
-        Connection connection = null;
-        try{
-//            connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
-            connection = Main.getDbConnection();
-            Statement statement = connection.createStatement();
-            //Statement statement = mConn.createStatement();
-            statement.setQueryTimeout(30);
-            ResultSet rs = statement.executeQuery("select count(*) from customers");
-            rs.next();
-            int maxCount = rs.getInt(1);
-            statement.executeUpdate("insert into customers values(" + (maxCount + 1) + ", " + customer.getOrderId() + ", '" + customer.getName() + "', '" + customer.getCreditCard() + "', '" + customer.getAddress() + "', '" + customer.getCity() + "', '" + customer.getState() + "', '" + customer.getZipcode() + "', '" + customer.getCountry() + "')");
-            return maxCount + 1;
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return -1;
+    catch (SQLException e) {
+        System.out.println(e.getMessage());
     }
+    return -1;
+  }
 
-    public Product loadProduct(int id){
-        Connection connection = null;
-        Product empty = new Product(0,"Empty",0,0,"Empty");
-        try{
-//            connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
-            connection = Main.getDbConnection();
-            Statement statement = connection.createStatement();
-            //Statement statement = mConn.createStatement();
-            statement.setQueryTimeout(30);
-            ResultSet rs = statement.executeQuery("select count(*) from inventory");
-            rs.next();
-            int maxCount = rs.getInt(1);
-            //System.out.println("maxCount: "+maxCount);
-            if(id > maxCount || id < 1){
-                System.out.println("Invalid itemId");
-            }
-            else{
-                rs = statement.executeQuery("select * from inventory where itemId="+id);
-                return new Product(id, rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider"));
-            }
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return empty;
+  public int saveNewCustomer(Customer customer){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from customers");
+      rs.next();
+      int maxCount = rs.getInt(1);
+      statement.executeUpdate("insert into customers values(" + (maxCount + 1) + ", " + customer.getOrderId() + ", '" + customer.getName() + "', '" + customer.getCreditCard() + "', '" + customer.getAddress() + "', '" + customer.getCity() + "', '" + customer.getState() + "', '" + customer.getZipcode() + "', '" + customer.getCountry() + "')");
+      return maxCount + 1;
     }
-
-    public Order getOrder(int id){
-        Connection connection = null;
-        Order empty = new Order();
-        try{
-  //          connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
-            connection = Main.getDbConnection();
-            Statement statement = connection.createStatement();
-            //Statement statement = mConn.createStatement();
-            statement.setQueryTimeout(30);
-            ResultSet rs = statement.executeQuery("select count(*) from orders");
-            rs.next();
-            int maxCount = rs.getInt(1);
-            //System.out.println("maxCount: "+maxCount);
-            if(id > maxCount || id < 1){
-                System.out.println("Invalid itemId");
-            }
-            else{
-                rs = statement.executeQuery("select * from orders where itemId="+id);
-                int iid = rs.getInt("itemId");
-                Product prod = new Product(iid, rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider"));
-
-                return new Order(prod, id);
-            }
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return empty;
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
     }
+    return -1;
+  }
+
+  public Product loadProduct(int id){
+    Connection connection = null;
+    Product empty = new Product(0,"Empty",0,0,"Empty");
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from inventory");
+      rs.next();
+      int maxCount = rs.getInt(1);
+      if(id > maxCount || id < 1){
+          System.out.println("Invalid itemId");
+      }
+      else{
+          rs = statement.executeQuery("select * from inventory where itemId="+id);
+          return new Product(id, rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider"));
+      }
+    }
+    catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+    return empty;
+  }
+
+  public Order getOrder(int id){
+    Connection connection = null;
+    Order empty = new Order();
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from orders");
+      rs.next();
+      int maxCount = rs.getInt(1);
+      if(id > maxCount || id < 1){
+          System.out.println("Invalid itemId");
+      }
+      else{
+        rs = statement.executeQuery("select * from orders where itemId="+id);
+        int iid = rs.getInt("itemId");
+        Product prod = new Product(iid, rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider"));
+        return new Order(prod, id);
+      }
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return empty;
+  }
   public ArrayList<Product> loadAllProducts(){
     Connection connection = null;
     ArrayList<Product> products = new ArrayList<Product>();
     try{
-//      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
-        connection = Main.getDbConnection();
-        Statement statement = connection.createStatement();
-      //System.out.println("Reached...");
-      //Statement statement = mConn.createStatement();
-      //System.out.println("Reached...");
-
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
       statement.setQueryTimeout(30);
       ResultSet rs = statement.executeQuery("select * from inventory");
       while(rs.next()){
@@ -221,22 +178,18 @@ public class SQLiteAdapter implements DataAccess{
     }
     return products;
   }
-
   public void deleteProduct(Product product){
     Connection connection = null;
     try{
-  //    connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
       connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
-      //Statement statement = mConn.createStatement();
       statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("delete from inventory where itemId="+product.getId());
+      statement.executeUpdate("delete from inventory where itemId="+product.getId());
     }
     catch (SQLException e) {
       System.out.println(e.getMessage());
     }
   }
-
   public boolean isValidProductId(int id){
     Connection connection = null;
     try{
@@ -253,22 +206,37 @@ public class SQLiteAdapter implements DataAccess{
   }
 
   public void saveEmployee(Employee employee){}
-  public Employee loadEmployee(int id){return null;}
+  public Employee loadEmployee(int id){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select * from employees where employeeId="+id);
+      if(rs.next())
+        return new Employee(rs.getInt("employeeId"), rs.getString("name"), rs.getBinaryStream("image"), rs.getString("username"), rs.getString("password"), rs.getString("position"));
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return null;
+  }
   public void saveNewEmployee(Employee employee){}
   public ArrayList<Employee> loadAllEmployees(){return null;}
   public void deleteEmployee(Employee employee){}
-  public boolean isValidLoginInfo(String username, String password){
+  public int getUserId(String username, String password){
     Connection connection = null;
     try{
       connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
       Statement statement = connection.createStatement();
       statement.setQueryTimeout(30);
       ResultSet rs = statement.executeQuery("select * from employees where username='" + username +"' and password='" + password + "'");
-      return rs.next();
+      if(rs.next())
+        return rs.getInt("employeeId");
     }
     catch (SQLException e) {
       System.out.println(e.getMessage());
     }
-    return false;
+    return -1;
   }
 };

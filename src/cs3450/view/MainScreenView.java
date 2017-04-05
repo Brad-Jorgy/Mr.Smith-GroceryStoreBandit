@@ -22,7 +22,7 @@ public class MainScreenView {
 				JLabel title = new JLabel("Store Management System", SwingConstants.CENTER);
         JButton checkoutBtn = new JButton("Checkout");
 				JButton inventoryBtn = new JButton("Inventory");
-        JButton profileBtn = new JButton("Profile");
+        JButton profileBtn = new JButton("Profile: " + MainScreenControl.getCurrEmployeeName());
         JButton returnBtn = new JButton("Return Item");
         JButton employeeBtn = new JButton("Employees");
 
@@ -36,12 +36,18 @@ public class MainScreenView {
         c.gridwidth = 1;
         c.gridheight = 1;
 
-		inventoryBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainScreenControl.showInventoryScreen();
-            }
-        });
+        if(MainScreenControl.isCurrEmployeeManager()){
+  		    inventoryBtn.addActionListener(new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                  MainScreenControl.showInventoryScreen();
+              }
+          });
+        }
+        else{
+          inventoryBtn.setEnabled(false);
+          employeeBtn.setEnabled(false);
+        }
 
         checkoutBtn.addActionListener(new ActionListener() {
             @Override
