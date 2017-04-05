@@ -51,4 +51,5 @@ public interface DataAccess{
   public ArrayList<Employee> loadAllEmployees();
   public void deleteEmployee(Employee employee);
   public int getUserId(String username, String password);
+  public int getNewEmployeeId();
 };
