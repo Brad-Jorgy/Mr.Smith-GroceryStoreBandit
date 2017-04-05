@@ -227,7 +227,7 @@ public class SQLiteAdapter implements DataAccess{
   public int getUserId(String username, String password){
     Connection connection = null;
     try{
-      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
       statement.setQueryTimeout(30);
       ResultSet rs = statement.executeQuery("select * from employees where username='" + username +"' and password='" + password + "'");

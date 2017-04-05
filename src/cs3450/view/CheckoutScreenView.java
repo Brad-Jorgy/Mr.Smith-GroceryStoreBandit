@@ -28,8 +28,9 @@ public class CheckoutScreenView{
         JLabel title = new JLabel("Current Basket Contents", SwingConstants.CENTER);
         JButton addItemBtn = new JButton("Add Item");
         JButton deleteBtn = new JButton("Delete Item");
-        JButton checkoutBtn = new JButton("Check Out");
         JButton editSaveOrderBtn = new JButton("Edit Quantity");
+        JButton cardCheckoutBtn = new JButton("Card Check Out");
+        JButton cashCheckoutBtn = new JButton("Cash Check Out");
         DefaultListModel listModel = new DefaultListModel();
         List<PurchaseItem> olist = order.getOrderList();
         Iterator<PurchaseItem> orderIterator = olist.iterator();
@@ -71,12 +72,16 @@ public class CheckoutScreenView{
         c.gridx = 3;
         pane.add(deleteBtn, c);
         c.gridx = 4;
-        pane.add(checkoutBtn, c);
-        c.gridx = 5;
         pane.add(editSaveOrderBtn, c);
+        c.gridx = 5;
+        pane.add(cardCheckoutBtn, c);
+        c.gridx = 6;
+        pane.add(cashCheckoutBtn, c);
+
 
         backBtn.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
+                order.clearOrder();
             MainScreenControl.showMainScreen();
             }
         });
@@ -87,9 +92,15 @@ public class CheckoutScreenView{
             }
         });
 
-        checkoutBtn.addMouseListener(new MouseAdapter() {
+        cardCheckoutBtn.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                CheckoutScreenControl.showPaymentScreen(MainScreenControl.getFrame(), order);
+                CheckoutScreenControl.showCardPaymentScreen(MainScreenControl.getFrame(), order);
+            }
+        });
+
+        cashCheckoutBtn.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                CheckoutScreenControl.showCashPaymentScreen(MainScreenControl.getFrame(), order);
             }
         });
 

@@ -16,13 +16,13 @@ import cs3450.control.MainScreenControl;
 import cs3450.model.Order;
 import cs3450.model.Customer;
 
-public class PaymentScreenView {
+public class CardPaymentScreenView {
 
     public static void addComponentsToPane(Container pane, Order order)
     {
 
         JButton submitBtn = new JButton("SUBMIT PAYMENT");
-        JLabel title = new JLabel(" Payment", SwingConstants.CENTER);
+        JLabel title = new JLabel(" Card Payment", SwingConstants.CENTER);
         JButton cancelBtn = new JButton("   Cancel");
         JLabel nameOnCard = new JLabel("    Name On Card");
         JTextField name = new JTextField(" ");
@@ -32,7 +32,7 @@ public class PaymentScreenView {
         JTextField exp = new JTextField(" ");
         JLabel CVC = new JLabel("   CVS");
         JTextField cvc = new JTextField(" ");
-        JTextField totalAmount = new JTextField(Double.toString(order.getTotal()));
+        JTextField totalAmount = new JTextField("TOTAL:: " + Double.toString(order.getTotal()));
         pane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -52,10 +52,12 @@ public class PaymentScreenView {
         submitBtn.addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent e) {
 //                MainScreenControl.showCheckoutScreen();
-                DataAccess db = Main.getSQLiteAccess();
-                int orderId = db.saveNewOrder(order);
-                order.clearOrder();
-                db.saveNewCustomer(new Customer(0, orderId, name.getText(), "0", "0", "None", "None", "None", "USA"));
+                if (order.getOrderSize() > 0) {
+                    DataAccess db = Main.getSQLiteAccess();
+                    int orderId = db.saveNewOrder(order);
+                    order.clearOrder();
+                    db.saveNewCustomer(new Customer(0, orderId, name.getText(), "0", "0", "None", "None", "None", "USA"));
+                }
                 MainScreenControl.showMainScreen();
             }
         });
