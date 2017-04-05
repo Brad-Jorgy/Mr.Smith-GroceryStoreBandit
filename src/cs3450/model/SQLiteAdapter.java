@@ -186,8 +186,20 @@ public class SQLiteAdapter implements DataAccess{
     return -1;
   }
 
-
-
+  public void updateOrderInventory(PurchaseItem item) {
+    Connection connection = null;
+    Product prodIn = loadProduct(item.getId());
+    int newCount = prodIn.getQuantity() - item.getQuantity();
+    try {
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      statement.executeUpdate("update inventory set name='" + prodIn.getName() + "', price=" + prodIn.getPrice() + ", quantity=" + newCount + ", provider='" + prodIn.getProvider() + "' where itemId=" + prodIn.getId());
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    MainScreenControl.showInventoryScreen();
+  }
 
   public void saveEmployee(Employee employee){
     Connection connection = null;

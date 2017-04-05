@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import cs3450.control.CheckoutScreenControl;
 import cs3450.control.Main;
 import cs3450.model.DataAccess;
 import cs3450.model.SQLiteAdapter;
@@ -55,6 +56,7 @@ public class CardPaymentScreenView {
                 if (order.getOrderSize() > 0) {
                     DataAccess db = Main.getSQLiteAccess();
                     int orderId = db.saveNewOrder(order);
+                    CheckoutScreenControl.updateDB(order);
                     order.clearOrder();
                     db.saveNewCustomer(new Customer(0, orderId, name.getText(), "0", "0", "None", "None", "None", "USA"));
                 }

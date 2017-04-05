@@ -3,12 +3,14 @@ package cs3450.control;
 import java.awt.*;
 import javax.swing.*;
 import java.text.NumberFormat;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
-
+import java.util.List;
 import cs3450.model.*;
 
 import cs3450.view.CardPaymentScreenView;
 import cs3450.view.CashPaymentScreenView;
+
 
 public class CheckoutScreenControl {
 
@@ -57,7 +59,15 @@ public class CheckoutScreenControl {
         updateCheckoutScreen(order);
     }
 
-
+    static public void updateDB(Order order) {
+        List<PurchaseItem> olist = order.getOrderList();
+        Iterator<PurchaseItem> orderIterator = olist.iterator();
+        while( orderIterator.hasNext()) {
+            PurchaseItem item = orderIterator.next();
+            DataAccess db = Main.getSQLiteAccess();
+            db.updateOrderInventory(item);
+        }
+    }
 
 //    static public void showEditOrderPopup(Order order){
 //        DataAccess db = Main.getSQLiteAccess();
