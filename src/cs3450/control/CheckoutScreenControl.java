@@ -1,20 +1,14 @@
 package cs3450.control;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import java.text.NumberFormat;
-import java.util.*;
 import java.util.concurrent.TimeUnit;
-import javax.swing.*;
-import javax.swing.text.NumberFormatter;
-
-import java.sql.ResultSet;
 
 import cs3450.model.*;
 
-import cs3450.view.PaymentScreenView;
+import cs3450.view.CardPaymentScreenView;
+import cs3450.view.CashPaymentScreenView;
 
 public class CheckoutScreenControl {
 
@@ -63,6 +57,8 @@ public class CheckoutScreenControl {
         updateCheckoutScreen(order);
     }
 
+
+
 //    static public void showEditOrderPopup(Order order){
 //        DataAccess db = Main.getSQLiteAccess();
 //        db.loadProduct(order.getItem());
@@ -109,9 +105,15 @@ public class CheckoutScreenControl {
         MainScreenControl.showCheckoutScreen();
     }
 
-    public static void showPaymentScreen(JFrame frame, Order order) {
+    public static void showCardPaymentScreen(JFrame frame, Order order) {
         frame.getContentPane().removeAll();
-        PaymentScreenView.addComponentsToPane(frame.getContentPane(), order);
+        CardPaymentScreenView.addComponentsToPane(frame.getContentPane(), order);
+        MainScreenControl.updateFrame();
+    }
+
+    public static void showCashPaymentScreen(JFrame frame, Order order) {
+        frame.getContentPane().removeAll();
+        CashPaymentScreenView.addComponentsToPane(frame.getContentPane(), order);
         MainScreenControl.updateFrame();
     }
 
