@@ -33,6 +33,15 @@ public class LoginScreenControl{
 		frame.setVisible(true);
   }
 
+  public static void attemptLogin(String username, String password){
+    int id = getUserId(username, password);
+    if(id > 0){
+      MainScreenControl.showMainScreen(LoginScreenControl.loadEmployee(id));
+    }
+    else
+      JOptionPane.showMessageDialog(null, "Invalid username / password combo.");
+  }
+
   public static int getUserId(String username, String password){
     DataAccess db = Main.getSQLiteAccess();
     return db.getUserId(username, password);
