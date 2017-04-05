@@ -10,9 +10,9 @@ import java.util.*;
 
 import javax.swing.JFrame;
 
-import cs3450.view.MainScreenView;
-import cs3450.view.InventoryScreenView;
-import cs3450.view.CheckoutScreenView;
+import cs3450.view.*;
+//import cs3450.view.InventoryScreenView;
+//import cs3450.view.CheckoutScreenView;
 import cs3450.model.Order;
 import cs3450.model.Employee;
 
@@ -59,7 +59,13 @@ public class MainScreenControl{
 		updateFrame();
 	}
 
-  	public static void updateFrame(){
+  public static void showEmployeeScreen()
+  {
+    frame.getContentPane().removeAll();
+		EmployeeScreenView.addComponentsToPane(frame.getContentPane());
+		updateFrame();
+  }
+  public static void updateFrame(){
 		frame.getContentPane().repaint();
 		frame.getContentPane().revalidate();
 	}

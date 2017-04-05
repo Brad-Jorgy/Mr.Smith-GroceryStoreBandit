@@ -14,29 +14,6 @@ import cs3450.view.InventoryScreenView;
 import cs3450.control.MainScreenControl;
 
 public class SQLiteAdapter implements DataAccess{
-  private final Connection mConn;
-
-	public SQLiteAdapter() throws ClassNotFoundException {
-		Class.forName("org.sqlite.JDBC");
-		mConn = connectToDatabase();
-	}
-
-  public String toString(){
-    try{
-      return super.toString() + mConn.isValid(0);
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-    return "exception called";
-  }
-
-	private Connection connectToDatabase() {
-		Connection connection = null;
-    connection = Main.getDbConnection();
-		System.out.println("Connection to SQLite has been established.");
-		return connection;
-	}
 
   public void saveProduct(Product product){
     Connection connection = null;
@@ -193,7 +170,7 @@ public class SQLiteAdapter implements DataAccess{
   public boolean isValidProductId(int id){
     Connection connection = null;
     try{
-      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
       statement.setQueryTimeout(30);
       ResultSet rs = statement.executeQuery("select * from inventory where itemId="+id);
@@ -204,8 +181,27 @@ public class SQLiteAdapter implements DataAccess{
     }
     return false;
   }
+  public int getNewProductId(){
+    Connection connection = null;
+    return -1;
+  }
 
-  public void saveEmployee(Employee employee){}
+
+
+
+  public void saveEmployee(Employee employee){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      statement.executeUpdate("update employees set name='"+employee.getName()+"', username='"+employee.getUsername()+"', password='"+employee.getPassword()+"', position='" + employee.getPosition()+"' where employeeId="+employee.getId());
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    MainScreenControl.showEmployeeScreen();
+  }
   public Employee loadEmployee(int id){
     Connection connection = null;
     try{
@@ -221,18 +217,72 @@ public class SQLiteAdapter implements DataAccess{
     }
     return null;
   }
-  public void saveNewEmployee(Employee employee){}
-  public ArrayList<Employee> loadAllEmployees(){return null;}
-  public void deleteEmployee(Employee employee){}
+  public void saveNewEmployee(Employee employee){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      statement.executeUpdate("insert into employees values(" + employee.getId() + ", '" + employee.getName() + "', " + employee.getImage() + ", '" + employee.getUsername() + "', '" + employee.getPassword() + "', '" + employee.getPosition() +"')");
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+  public ArrayList<Employee> loadAllEmployees(){
+    Connection connection = null;
+    ArrayList<Employee> employees = new ArrayList<Employee>();
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select * from employees");
+      while(rs.next()){
+        employees.add(new Employee(rs.getInt("employeeId"), rs.getString("name"), rs.getBinaryStream("image"), rs.getString("username"), rs.getString("password"), rs.getString("position")));
+      }
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return employees;
+  }
+  public void deleteEmployee(Employee employee){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      statement.executeUpdate("delete from employees where employeeId="+employee.getId());
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+  }
   public int getUserId(String username, String password){
     Connection connection = null;
     try{
-      connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
+      connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
       statement.setQueryTimeout(30);
       ResultSet rs = statement.executeQuery("select * from employees where username='" + username +"' and password='" + password + "'");
       if(rs.next())
         return rs.getInt("employeeId");
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return -1;
+  }
+  public int getNewEmployeeId(){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from employees");
+      rs.next();
+      int maxCount = rs.getInt(1);
+      return maxCount + 1;
     }
     catch (SQLException e) {
       System.out.println(e.getMessage());

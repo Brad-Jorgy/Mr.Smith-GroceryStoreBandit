@@ -26,8 +26,8 @@ public class Employee{
   public String getUsername(){ return this.username; }
   public void setUsername(String username){ this.username = username; }
   public String getPassword(){ return this.password; }
-  public void setPassword(){ this.password = password; }
+  public void setPassword(String password){ this.password = password; }
   public String getPosition(){ return this.position; }
-  public void setPosition(){ this.position = position; }
+  public void setPosition(String position){ this.position = position; }
   public boolean isManager(){ return this.position == "Manager"; }
 };

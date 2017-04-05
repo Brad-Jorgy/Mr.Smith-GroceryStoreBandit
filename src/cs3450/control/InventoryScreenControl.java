@@ -83,11 +83,11 @@ public class InventoryScreenControl{
 
     static public void showDeleteProductPopup(Product product){
       JPanel popupPanel = new JPanel();
-      popupPanel.setLayout(new GridLayout(5,2));
-      JTextField nameTF = new JTextField(product.getName());
-      JTextField priceTF = new JTextField("" + product.getPrice(), 20);
-      JTextField quantityTF = new JTextField("" + product.getQuantity(), 20);
-      JTextField providerTF = new JTextField(product.getProvider(), 20);
+       popupPanel.setLayout(new GridLayout(5,2));
+      // JTextField nameTF = new JTextField(product.getName());
+      // JTextField priceTF = new JTextField("" + product.getPrice(), 20);
+      // JTextField quantityTF = new JTextField("" + product.getQuantity(), 20);
+      // JTextField providerTF = new JTextField(product.getProvider(), 20);
       popupPanel.add(new JLabel("Id: "));
       popupPanel.add(new JLabel("" + product.getId()));
       popupPanel.add(new JLabel("Name: "));
@@ -100,13 +100,8 @@ public class InventoryScreenControl{
       popupPanel.add(new JLabel(product.getProvider()));
       int result = JOptionPane.showConfirmDialog(null, popupPanel, "Delete Product??", JOptionPane.YES_NO_OPTION);
       if(result ==JOptionPane.YES_OPTION){
-        if(areValuesValid(priceTF.getText(), quantityTF.getText())){
-          DataAccess db = Main.getSQLiteAccess();
-          db.deleteProduct(product);
-        }
-        else{
-          System.out.println("Fail save");
-        }
+        DataAccess db = Main.getSQLiteAccess();
+        db.deleteProduct(product);
       }
       updateInventoryScreen();
     }

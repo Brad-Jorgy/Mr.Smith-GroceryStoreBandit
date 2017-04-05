@@ -3,6 +3,7 @@ package cs3450.model;
 import java.io.File;
 import java.util.*;
 
+import cs3450.control.Main;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -25,6 +26,11 @@ public class InitSQLite {
                 statement.executeUpdate("insert into inventory values(" + products.get(i).getId() + ", '" + products.get(i).getName() + "', " + products.get(i).getPrice() + ", " + products.get(i).getQuantity() + ", '" + products.get(i).getProvider() + "')");
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
+            } finally{
+              if(connection != null){
+                try { connection.close(); }
+                catch (SQLException e) { System.out.println(e.getMessage()); }
+              }
             }
         }
         try {
@@ -41,6 +47,7 @@ public class InitSQLite {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+        Main.closeConnection();
         return connection;
     }
 }

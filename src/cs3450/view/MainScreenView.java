@@ -43,6 +43,12 @@ public class MainScreenView {
                   MainScreenControl.showInventoryScreen();
               }
           });
+          employeeBtn.addActionListener(new ActionListener() {
+              @Override
+              public void actionPerformed(ActionEvent e) {
+                  MainScreenControl.showEmployeeScreen();
+              }
+          });
         }
         else{
           inventoryBtn.setEnabled(false);

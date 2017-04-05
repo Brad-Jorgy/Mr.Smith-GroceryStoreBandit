@@ -18,6 +18,9 @@ import cs3450.view.InventoryScreenView;
 import cs3450.view.PaymentScreenView;
 import cs3450.view.LoginScreenView;
 import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.sql.DriverManager;
 
 public class Main {
 	private static DataAccess sqliteAccess;
@@ -28,6 +31,7 @@ public class Main {
 		connection = InitSQLite.setupDatabaseIfNotSetup();
 		try{
       sqliteAccess = new SQLiteAdapter();
+			Class.forName("org.sqlite.JDBC");
     }
     catch(ClassNotFoundException e){
 			System.out.println(e.getMessage());
@@ -42,6 +46,13 @@ public class Main {
 	public static Connection getDbConnection() {
 		return connection;
 	}
+
+	public static void closeConnection(){
+    if(connection != null){
+      try { connection.close(); }
+      catch (SQLException e) { System.out.println(e.getMessage()); }
+    }
+  }
 
 	public static DataAccess getSQLiteAccess(){
 		return sqliteAccess;
