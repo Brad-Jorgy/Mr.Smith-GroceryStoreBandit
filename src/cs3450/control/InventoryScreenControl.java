@@ -37,13 +37,16 @@ public class InventoryScreenControl{
       popupPanel.add(providerTF);
       int result = JOptionPane.showConfirmDialog(null, popupPanel, "Update Product:", JOptionPane.OK_CANCEL_OPTION);
       if(result ==JOptionPane.OK_OPTION){
-        if(areValuesValid(nameTF.getText(), priceTF.getText(), quantityTF.getText(), providerTF.getText())){
+        if(areValuesValid(priceTF.getText(), quantityTF.getText())){
           DataAccess db = Main.getSQLiteAccess();
           product.setName(nameTF.getText());
           product.setPrice(Double.parseDouble(priceTF.getText()));
           product.setQuantity(Integer.parseInt(quantityTF.getText()));
           product.setProvider(providerTF.getText());
           db.saveProduct(product);
+        }
+        else{
+          System.out.println("Fail save");
         }
       }
       updateInventoryScreen();
@@ -66,10 +69,13 @@ public class InventoryScreenControl{
       popupPanel.add(providerTF);
       int result = JOptionPane.showConfirmDialog(null, popupPanel, "Add Product:", JOptionPane.OK_CANCEL_OPTION);
       if(result ==JOptionPane.OK_OPTION){
-        if(areValuesValid(nameTF.getText(), priceTF.getText(), quantityTF.getText(), providerTF.getText())){
+        if(areValuesValid(priceTF.getText(), quantityTF.getText())){
           DataAccess db = Main.getSQLiteAccess();
           Product product = new Product(9867, nameTF.getText(), Double.parseDouble(priceTF.getText()), Integer.parseInt(quantityTF.getText()), providerTF.getText());
           db.saveNewProduct(product);
+        }
+        else{
+          System.out.println("Fail save new product.");
         }
       }
       updateInventoryScreen();
@@ -78,6 +84,10 @@ public class InventoryScreenControl{
     static public void showDeleteProductPopup(Product product){
       JPanel popupPanel = new JPanel();
        popupPanel.setLayout(new GridLayout(5,2));
+      // JTextField nameTF = new JTextField(product.getName());
+      // JTextField priceTF = new JTextField("" + product.getPrice(), 20);
+      // JTextField quantityTF = new JTextField("" + product.getQuantity(), 20);
+      // JTextField providerTF = new JTextField(product.getProvider(), 20);
       popupPanel.add(new JLabel("Id: "));
       popupPanel.add(new JLabel("" + product.getId()));
       popupPanel.add(new JLabel("Name: "));
@@ -96,21 +106,13 @@ public class InventoryScreenControl{
       updateInventoryScreen();
     }
 
-    static public boolean areValuesValid(String name, String price, String quantity, String provider){
-      if("".equals(name)){
-        JOptionPane.showMessageDialog(null, "Invalid Name: Name cannot be empty.");
-        return false;
-      }
+    static public boolean areValuesValid(String price, String quantity){
       if(!price.matches("[0-9]*.?[0-9]?[0-9]?")){
-        JOptionPane.showMessageDialog(null, "Error: Invalid Price.");
+        System.out.println("Error: invalid price");
         return false;
       }
       if(!quantity.matches("[0-9]*")){
-        JOptionPane.showMessageDialog(null, "Error: Invalid Quantity.");
-        return false;
-      }
-      if("".equals(provider)){
-        JOptionPane.showMessageDialog(null, "Invalid Provider: Provider cannot be empty.");
+        System.out.println("Error: invalid quantity");
         return false;
       }
       return true;

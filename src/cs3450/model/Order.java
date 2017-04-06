@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 public class Order {
 	private Map<Product, Integer> mItemsList;
-
+	private int orderNumber;
 	private double mTotal;
 
 	public Order() {
@@ -19,6 +19,14 @@ public class Order {
 	public Order(Product product, Integer id) {
 		mItemsList = new HashMap<Product, Integer>();
 		mTotal = 0;
+	}
+
+	public int getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(int orderNum) {
+		 orderNumber = orderNum;
 	}
 
 	public void clearOrder() {

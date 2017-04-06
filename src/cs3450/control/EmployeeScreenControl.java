@@ -46,6 +46,9 @@ public class EmployeeScreenControl{
           employee.setPosition(positionTF.getText());
           db.saveEmployee(employee);
         }
+        else{
+          System.out.println("Fail save");
+        }
       }
       updateEmployeeScreen();
     }
@@ -71,6 +74,9 @@ public class EmployeeScreenControl{
           DataAccess db = new SQLiteAdapter();
           int newId = db.getNewEmployeeId();
           db.saveNewEmployee(new Employee(newId, nameTF.getText(), null, usernameTF.getText(), passwordTF.getText(), positionTF.getText()));
+        }
+        else{
+          System.out.println("Fail save");
         }
       }
       updateEmployeeScreen();
@@ -99,19 +105,19 @@ public class EmployeeScreenControl{
 
     static public boolean areValuesValid(String name, String username, String password, String position){
       if("".equals(name)){
-        JOptionPane.showMessageDialog(null, "Invalid Name: Name cannot be empty.");
+        System.out.println("Error: Empty Name Entry.");
         return false;
       }
       if("".equals(username)){
-        JOptionPane.showMessageDialog(null, "Invalid Username: Username cannot be empty.");
+        System.out.println("Error: Empty Username Entry.");
         return false;
       }
       if("".equals(password)){
-        JOptionPane.showMessageDialog(null, "Invalid Password: Password cannot be empty.");
+        System.out.println("Error: Empty Password Entry.");
         return false;
       }
       if(!"Manager".equals(position)&&!"Cashier".equals(position)&&!"Customer Support".equals(position)){
-        JOptionPane.showMessageDialog(null, "Error: Invalid Position (Must be set to Manager, Cashier, or Customer Support.)");
+        System.out.println("Error: Invalid Position (Must be set to Manager, Cashier, or Customer Support.)");
         return false;
       }
       return true;

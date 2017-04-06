@@ -69,6 +69,13 @@ public class MainScreenView {
             }
         });
 
+        returnBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainScreenControl.showReturnScreen();
+            }
+        });
+
         pane.add(title, c);
         c.gridx = 1;
         pane.add(profileBtn, c);
