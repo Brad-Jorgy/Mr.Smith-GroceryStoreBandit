@@ -44,6 +44,7 @@ public interface DataAccess{
   public ArrayList<Product> loadAllProducts();
   public void deleteProduct(Product product);
   public boolean isValidProductId(int id);
+  public Order getOrder(int id);
 
   public void saveEmployee(Employee employee);
   public Employee loadEmployee(int id);

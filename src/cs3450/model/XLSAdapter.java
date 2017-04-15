@@ -79,6 +79,7 @@ public class XLSAdapter implements DataAccess{
   public void deleteEmployee(Employee employee){}
   public int getUserId(String username, String password){return -1;}
   public int getNewEmployeeId() { return -1; }
-  public void updateOrderInventory(PurchaseItem item){};
+  public void updateOrderInventory(PurchaseItem item){}
+  public Order getOrder(int id){return null;}
 
-};
+}

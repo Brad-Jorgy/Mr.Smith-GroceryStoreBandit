@@ -49,11 +49,16 @@ public class MainScreenControl{
 		InventoryScreenView.addComponentsToPane(frame.getContentPane());
 		updateFrame();
 	}
-
-	public static void showCheckoutScreen()
+    public static void showCheckoutScreen()
+    {
+        frame.getContentPane().removeAll();
+        CheckoutScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
+        updateFrame();
+    }
+	public static void showReturnScreen()
 	{
 		frame.getContentPane().removeAll();
-		CheckoutScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
+		ReturnItemScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
 		updateFrame();
 	}
 
