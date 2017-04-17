@@ -97,6 +97,14 @@ public class MainScreenControl{
     }
     return false;
   }
+  public static boolean isCurrEmployeeCS(){
+      if(currEmployee == null)
+          return false;
+      if("Customer Support".equals(currEmployee.getPosition())){
+          return true;
+      }
+      return false;
+  }
   public static String getCurrEmployeeName(){
     return currEmployee.getName();
   }
