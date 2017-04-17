@@ -55,6 +55,17 @@ public class MainScreenView {
           employeeBtn.setEnabled(false);
         }
 
+        if(MainScreenControl.isCurrEmployeeCS()||MainScreenControl.isCurrEmployeeManager()){
+            returnBtn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    MainScreenControl.showReturnScreen();
+                }
+            });
+        }
+        else{
+            returnBtn.setEnabled(false);
+        }
         profileBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,12 +80,7 @@ public class MainScreenView {
             }
         });
 
-        returnBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MainScreenControl.showReturnScreen();
-            }
-        });
+
 
         pane.add(title, c);
         c.gridx = 1;
