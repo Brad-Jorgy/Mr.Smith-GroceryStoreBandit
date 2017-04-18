@@ -92,11 +92,18 @@ public class MainScreenControl{
   public static boolean isCurrEmployeeManager(){
     if(currEmployee == null)
       return false;
-    if("Manager".equals(currEmployee.getPosition())){
+    if("Manager".equals(currEmployee.getPosition()))
       return true;
-    }
     return false;
   }
+  public static boolean isCurrEmployeeCS(){
+    if(currEmployee == null)
+      return false;
+    if("Customer Support".equals(currEmployee.getPosition()))
+      return true;
+    return false;
+  }
+
   public static String getCurrEmployeeName(){
     return currEmployee.getName();
   }
