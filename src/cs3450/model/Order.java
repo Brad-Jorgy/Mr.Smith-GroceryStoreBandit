@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 public class Order {
 	private Map<Product, Integer> mItemsList;
 	private int orderNumber;
+	private int orderCustomer;
 	private double mTotal;
 
 	public Order() {
@@ -23,6 +24,12 @@ public class Order {
 
 	public int getOrderNumber() {
 		return orderNumber;
+	}
+
+	public int getOrderCustomer() { return orderCustomer; }
+
+	public void setOrderCustomer(int customerNumber) {
+	    orderCustomer = customerNumber;
 	}
 
 	public void setOrderNumber(int orderNum) {
@@ -73,7 +80,7 @@ public class Order {
 		for (Entry<Product, Integer> entry : mItemsList.entrySet()) {
 			Product p = entry.getKey();
 			Integer q = entry.getValue();
-			itemList.add(new PurchaseItem(p, q));
+			itemList.add(new PurchaseItem(orderCustomer,orderNumber,p, q));
 		}
 		return itemList;
 	}

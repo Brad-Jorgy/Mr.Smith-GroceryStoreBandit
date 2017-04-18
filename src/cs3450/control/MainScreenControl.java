@@ -55,10 +55,10 @@ public class MainScreenControl{
         CheckoutScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
         updateFrame();
     }
-	public static void showReturnScreen()
+	public static void showReturnScreen(Order order)
 	{
 		frame.getContentPane().removeAll();
-		ReturnItemScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
+		ReturnItemScreenView.addComponentsToPane(frame.getContentPane(), order);
 		updateFrame();
 	}
 

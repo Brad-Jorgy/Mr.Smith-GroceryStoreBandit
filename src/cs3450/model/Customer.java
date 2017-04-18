@@ -10,10 +10,10 @@ public class Customer {
     private String state;
     private String zipcode;
     private String country;
+    private String loyalty;
 
-    public Customer(int customerId, int orderId, String name, String creditCard, String address, String city, String state, String zipcode, String country) {
+    public Customer(int customerId, String name, String creditCard, String address, String city, String state, String zipcode, String country, String loyalty) {
         this.customerId = customerId;
-        this.orderId = orderId;
         this.name = name;
         this.creditCard = creditCard;
         this.address = address;
@@ -21,6 +21,7 @@ public class Customer {
         this.state = state;
         this.zipcode = zipcode;
         this.country = country;
+        this.loyalty = loyalty;
     }
 
     public int getId(){ return this.customerId; }
@@ -39,8 +40,8 @@ public class Customer {
     public void setZipcode(String zipcode){ this.zipcode = zipcode; }
     public String getCountry(){ return this.country; }
     public void setCountry(String country){ this.country = country; }
-    public int getOrderId() { return this.orderId; }
-    public void setOrderId(int oId) { this.orderId = oId; }
+    public String getLoyalty() { return this.loyalty; }
+    public void setOrderId(String loyal) { this.loyalty = loyal; }
 
 //    @Override
 //    public String toString() {

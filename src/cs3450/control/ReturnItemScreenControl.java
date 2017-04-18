@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReturnItemScreenControl {
 
-    static public void showEditQuantityPopup( PurchaseItem purchaseItem){
+    static public void showEditQuantityPopup( PurchaseItem purchaseItem, Order order){
 
         NumberFormat nf = NumberFormat.getInstance();
         JPanel popupPanel = new JPanel();
@@ -31,26 +31,18 @@ public class ReturnItemScreenControl {
 
         int result = JOptionPane.showConfirmDialog(null, popupPanel, "Edit Quantity", JOptionPane.OK_CANCEL_OPTION);
         if(result == JOptionPane.OK_OPTION){
-            int count = Integer.parseInt(quantityTF.getText());
-//            if(count <= 0) {
-//                order.removeItem(purchaseItem.getProduct());
-//            } else {
-//                order.editItem(purchaseItem.getProduct(), Integer.parseInt(quantityTF.getText()));
-//            }
+            order.editItem(purchaseItem.getProduct(), -Integer.parseInt(quantityTF.getText()));
         }
         else{
             System.out.println("Fail save");
         }
- //       updateReturnScreen();
+       updateReturnScreen(order);
     }
 
-    static public Order selectOrderToEditPopup() {
+    static public void selectOrderToEditPopup() {
         JPanel popupPanel = new JPanel();
         popupPanel.setLayout(new GridLayout(5, 2));
         JTextField idTF = new JTextField();
-        //JTextField priceTF = new JTextField();
-        JTextField quantityTF = new JTextField();
-        //JTextField providerTF = new JTextField();
         popupPanel.add(new JLabel("Order Id: "));
         popupPanel.add(idTF);
 
@@ -58,9 +50,9 @@ public class ReturnItemScreenControl {
         Order order = null;
         if (result == JOptionPane.OK_OPTION) {
             DataAccess db = Main.getSQLiteAccess();
-            order = db.getOrder(Integer.parseInt(quantityTF.getText()));
+            order = db.getOrder(Integer.parseInt(idTF.getText()));
         }
-        return(order);
+        updateReturnScreen(order);
     }
 
     static public void deleteItem(PurchaseItem item) {
@@ -77,13 +69,13 @@ public class ReturnItemScreenControl {
         }
     }
 
-    static public void updateReturnScreen(JFrame frame, Order order) {
+    static public void updateReturnScreen(Order order) {
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             System.err.println(e.getMessage());
         }
-        ReturnItemScreenView.addComponentsToPane(frame.getContentPane(), order);
+        MainScreenControl.showReturnScreen(order);
     }
 
     public static void showCardPaymentScreen(JFrame frame, Order order) {

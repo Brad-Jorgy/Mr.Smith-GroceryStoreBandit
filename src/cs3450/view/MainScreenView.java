@@ -59,7 +59,7 @@ public class MainScreenView {
             returnBtn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    MainScreenControl.showReturnScreen();
+                    MainScreenControl.showReturnScreen(new Order());
                 }
             });
         }
@@ -80,7 +80,12 @@ public class MainScreenView {
             }
         });
 
-
+        returnBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainScreenControl.showReturnScreen(new Order());
+            }
+        });
 
         pane.add(title, c);
         c.gridx = 1;

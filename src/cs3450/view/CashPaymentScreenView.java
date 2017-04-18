@@ -54,10 +54,11 @@ public class CashPaymentScreenView {
                 MainScreenControl.showCheckoutScreen();
                 if (order.getOrderSize() > 0) {
                     DataAccess db = Main.getSQLiteAccess();
+                    int customerId = db.saveNewCustomer(new Customer(0, "Cash Payment", "0", "0", "None", "None", "None", "USA","no"));
+                    order.setOrderCustomer(customerId);
                     int orderId = db.saveNewOrder(order);
                     order.clearOrder();
-                    db.saveNewCustomer(new Customer(0, orderId, "Cash Payment", "0", "0", "None", "None", "None", "USA"));
-                }
+            }
                 MainScreenControl.showMainScreen();
             }
         });

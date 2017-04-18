@@ -1,13 +1,25 @@
 package cs3450.model;
 
 public class PurchaseItem {
+	private int mCustomerId;
+	private int mOrderId;
 	private Product mProduct;
 	private int mQuantity;
 
-	public PurchaseItem(Product product, int quantity) {
+	public PurchaseItem(int customerId, int orderId, Product product, int quantity) {
+		mCustomerId = customerId;
+		mOrderId = orderId;
 		mProduct = product;
 		mQuantity = quantity;
 	}
+
+	public int getOrderId() {return mOrderId;}
+
+	public int getCustomerId() {return mCustomerId;}
+
+	public void setOrderId(int orderId) {mOrderId = orderId;}
+
+	public void setCustomerId(int customerId) {mCustomerId = customerId;}
 
 	public int getId() {
 		return mProduct.getId();
@@ -20,6 +32,8 @@ public class PurchaseItem {
 	public Product getProduct() {
 		return mProduct;
 	}
+
+	public void setQuantity(int quantity) { mQuantity = quantity; }
 
 	@Override
 	public String toString() {
