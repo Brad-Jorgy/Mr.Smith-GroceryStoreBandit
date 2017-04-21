@@ -25,7 +25,7 @@ public class InventoryScreenView {
       JButton addBtn = new JButton("Add Product");
       ArrayList<Product> products = InventoryScreenControl.getInventoryProducts();
       for(int i = 0; i < products.size(); i++){
-        listModel.addElement(products.get(i).getId()+": "+products.get(i).getName()+" $"+products.get(i).getPrice()+", "+products.get(i).getQuantity()+" in stock, ("+products.get(i).getProvider()+")");
+        listModel.addElement(products.get(i).getId()+": "+products.get(i).getName()+" $"+products.get(i).getPrice()+" (discount: $"+products.get(i).getDiscountPrice()+"), "+products.get(i).getQuantity()+" in stock, ("+products.get(i).getProvider()+")");
       }
       JList list = new JList(listModel);
       list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

@@ -35,7 +35,7 @@ public class XLSAdapter implements DataAccess{
   public void deleteProduct(Product product) { }
   public void saveProduct(Product product){  }
   public Product loadProduct(int id){
-    Product asdf = new Product(1,"Asd",2.1,5,"BEN");
+    Product asdf = new Product(1,"Asd",0,2.1,5,"BEN");
     return asdf;
   }
   public void saveNewProduct(Product product){}
@@ -59,10 +59,12 @@ public class XLSAdapter implements DataAccess{
         cell = cellIter.next();
         double price = cell.getNumericCellValue();
         cell = cellIter.next();
+        double discountPrice = cell.getNumericCellValue();
+        cell = cellIter.next();
         int quantity = (int)cell.getNumericCellValue();
         cell = cellIter.next();
         String provider = cell.getStringCellValue();
-        products.add(new Product(id, name, price, quantity, provider));
+        products.add(new Product(id, name, price, discountPrice, quantity, provider));
       }
       file.close();
     }

@@ -21,7 +21,7 @@ public class SQLiteAdapter implements DataAccess{
       connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
       statement.setQueryTimeout(30);
-      statement.executeUpdate("update inventory set name='"+product.getName()+"', price="+product.getPrice()+", quantity="+product.getQuantity()+", provider='"+product.getProvider()+"' where itemId="+product.getId());
+      statement.executeUpdate("update inventory set name='"+product.getName()+"', price="+product.getPrice()+", discountPrice="+product.getDiscountPrice()+"quantity="+product.getQuantity()+", provider='"+product.getProvider()+"' where itemId="+product.getId());
     }
     catch (SQLException e) {
       System.out.println(e.getMessage());
@@ -40,7 +40,7 @@ public class SQLiteAdapter implements DataAccess{
       ResultSet rs = statement.executeQuery("select count(*) from inventory");
       rs.next();
       int maxCount = rs.getInt(1);
-      statement.executeUpdate("insert into inventory values(" + (maxCount + 1) + ", '" + product.getName() + "', " + product.getPrice() + ", " + product.getQuantity() + ", '" + product.getProvider() + "')");
+      statement.executeUpdate("insert into inventory values(" + (maxCount + 1) + ", '" + product.getName() + "', " + product.getPrice() + ", " + product.getDiscountPrice() + ", " + product.getQuantity() + ", '" + product.getProvider() + "')");
     }
     catch (SQLException e) {
       System.out.println(e.getMessage());
@@ -91,7 +91,7 @@ public class SQLiteAdapter implements DataAccess{
 
   public Product loadProduct(int id){
     Connection connection = null;
-    Product empty = new Product(0,"Empty",0,0,"Empty");
+    Product empty = new Product(0,"Empty",0,0,0,"Empty");
     try{
       connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
@@ -104,7 +104,7 @@ public class SQLiteAdapter implements DataAccess{
       }
       else{
           rs = statement.executeQuery("select * from inventory where itemId="+id);
-          return new Product(id, rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider"));
+          return new Product(id, rs.getString("name"), rs.getDouble("price"), rs.getDouble("discountPrice"), rs.getInt("quantity"), rs.getString("provider"));
       }
     }
     catch (SQLException e) {
@@ -129,7 +129,7 @@ public class SQLiteAdapter implements DataAccess{
       else{
         rs = statement.executeQuery("select * from orders where itemId="+id);
         int iid = rs.getInt("itemId");
-        Product prod = new Product(iid, rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider"));
+        Product prod = new Product(iid, rs.getString("name"), rs.getDouble("price"), rs.getDouble("discountPrice"), rs.getInt("quantity"), rs.getString("provider"));
         return new Order(prod, id);
       }
     }
@@ -147,7 +147,7 @@ public class SQLiteAdapter implements DataAccess{
       statement.setQueryTimeout(30);
       ResultSet rs = statement.executeQuery("select * from inventory");
       while(rs.next()){
-        products.add(new Product(rs.getInt("itemId"), rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider")));
+        products.add(new Product(rs.getInt("itemId"), rs.getString("name"), rs.getDouble("price"), rs.getDouble("discountPrice"), rs.getInt("quantity"), rs.getString("provider")));
       }
     }
     catch (SQLException e) {
@@ -194,7 +194,7 @@ public class SQLiteAdapter implements DataAccess{
       connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
       statement.setQueryTimeout(30);
-      statement.executeUpdate("update inventory set name='" + prodIn.getName() + "', price=" + prodIn.getPrice() + ", quantity=" + newCount + ", provider='" + prodIn.getProvider() + "' where itemId=" + prodIn.getId());
+      statement.executeUpdate("update inventory set name='" + prodIn.getName() + "', price=" + prodIn.getPrice() + ", discountPrice=" + prodIn.getDiscountPrice() + ", quantity=" + newCount + ", provider='" + prodIn.getProvider() + "' where itemId=" + prodIn.getId());
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
