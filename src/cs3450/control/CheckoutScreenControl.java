@@ -11,8 +11,40 @@ import cs3450.model.*;
 import cs3450.view.CardPaymentScreenView;
 import cs3450.view.CashPaymentScreenView;
 
-
 public class CheckoutScreenControl {
+    private static Customer currCustomer = null;
+
+    static public void showPremiumCustomerPopup(){
+      JPanel popupPanel = new JPanel();
+      popupPanel.add(new JLabel("Is the customer a premium customer?"));
+      int result = JOptionPane.showConfirmDialog(null, popupPanel, "Premium?", JOptionPane.YES_NO_OPTION);
+      if(result == JOptionPane.YES_OPTION){
+        popupPanel = new JPanel();
+        JTextField idTF = new JTextField();
+        popupPanel.setLayout(new GridLayout(1,2));
+        popupPanel.add(new JLabel("Customer Id: "));
+        popupPanel.add(idTF);
+        boolean continueAsking = true;
+        while(continueAsking){
+          result = JOptionPane.showConfirmDialog(null, popupPanel, "Enter Customer Id", JOptionPane.OK_CANCEL_OPTION);
+          if(result == JOptionPane.OK_OPTION){
+            DataAccess db = Main.getSQLiteAccess();
+            if(db.isValidCustomerId(Integer.parseInt(idTF.getText()))){
+                setCurrCustomer(Integer.parseInt(idTF.getText()));
+                continueAsking = false;
+            }
+            else
+              JOptionPane.showMessageDialog(null, "Invalid Customer Id.");
+          }
+          else{
+            continueAsking = false;
+            setCurrCustomer(-1);
+          }
+        }
+      }
+      else
+        setCurrCustomer(-1);
+    }
 
     static public void showEditOrderPopup(Order order, PurchaseItem purchaseItem){
 
@@ -44,9 +76,7 @@ public class CheckoutScreenControl {
         JPanel popupPanel = new JPanel();
         popupPanel.setLayout(new GridLayout(5, 2));
         JTextField idTF = new JTextField();
-        //JTextField priceTF = new JTextField();
         JTextField quantityTF = new JTextField();
-        //JTextField providerTF = new JTextField();
         popupPanel.add(new JLabel("Product Id: "));
         popupPanel.add(idTF);
         popupPanel.add(new JLabel("Quantity: "));
@@ -69,50 +99,13 @@ public class CheckoutScreenControl {
         }
     }
 
-//    static public void showEditOrderPopup(Order order){
-//        DataAccess db = Main.getSQLiteAccess();
-//        db.loadProduct(order.getItem());
-//        JPanel popupPanel = new JPanel();
-//        popupPanel.setLayout(new GridLayout(5,2));
-//        JTextField nameTF = new JTextField(order.getName());
-//        JTextField priceTF = new JTextField("" + order.getPrice(), 20);
-//        JTextField quantityTF = new JTextField("" + order.getQuantity(), 20);
-//        JTextField providerTF = new JTextField(order.getProvider(), 20);
-//        popupPanel.add(new JLabel("Id: "));
-//        popupPanel.add(new JLabel("" + order.getId()));
-//        popupPanel.add(new JLabel("Name: "));
-//        popupPanel.add(nameTF);
-//        popupPanel.add(new JLabel("Price($): "));
-//        popupPanel.add(priceTF);
-//        popupPanel.add(new JLabel("Quantity: "));
-//        popupPanel.add(quantityTF);
-//        popupPanel.add(new JLabel("Provider: "));
-//        popupPanel.add(providerTF);
-//        int result = JOptionPane.showConfirmDialog(null, popupPanel, "Update Product:", JOptionPane.OK_CANCEL_OPTION);
-//        if(result ==JOptionPane.OK_OPTION){
-//            if(areValuesValid(priceTF.getText(), quantityTF.getText())){
-//                DataAccess db = Main.getSQLiteAccess();
-//                order.setName(nameTF.getText());
-//                order.setPrice(Double.parseDouble(priceTF.getText()));
-//                order.setQuantity(Integer.parseInt(quantityTF.getText()));
-//                order.setProvider(providerTF.getText());
-//                db.saveProduct(order);
-//                Product thisone = db.loadProduct(3);
-//            }
-//            else{
-//                System.out.println("Fail save");
-//            }
-//        }
-//        updateCheckoutScreen(order);
-//    }
-
     static public void updateCheckoutScreen(Order order) {
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             System.err.println(e.getMessage());
         }
-        MainScreenControl.showCheckoutScreen();
+        MainScreenControl.showCheckoutScreen(false);
     }
 
     public static void showCardPaymentScreen(JFrame frame, Order order) {
@@ -127,4 +120,20 @@ public class CheckoutScreenControl {
         MainScreenControl.updateFrame();
     }
 
+    public static boolean isCurrCustomerPremium(){
+      if(currCustomer == null)
+        return false;
+      return currCustomer.getPremium();
+    }
+    public static void setCurrCustomer(int customerId) {
+      DataAccess db = Main.getSQLiteAccess();
+      if(customerId == -1){
+        currCustomer = null;
+        MainScreenControl.setOrderPremium(false);
+      }
+      else{
+        currCustomer = db.loadCustomer(customerId);
+        MainScreenControl.setOrderPremium(currCustomer.getPremium());
+      }
+    }
 };

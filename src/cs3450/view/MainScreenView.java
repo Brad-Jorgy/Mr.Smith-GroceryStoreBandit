@@ -77,7 +77,7 @@ public class MainScreenView {
         checkoutBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MainScreenControl.showCheckoutScreen();
+                MainScreenControl.showCheckoutScreen(true);
             }
         });
 

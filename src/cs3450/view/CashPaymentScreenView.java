@@ -24,14 +24,6 @@ public class CashPaymentScreenView {
         JButton submitBtn = new JButton("SUBMIT PAYMENT");
         JLabel title = new JLabel(" Cash Payment", SwingConstants.CENTER);
         JButton cancelBtn = new JButton("   Cancel");
-//        JLabel nameOnCard = new JLabel("    Name On Card");
-//        JTextField name = new JTextField(" ");
-//        JLabel cardNum = new JLabel("   Card Number");
-//        JTextField number = new JTextField(" ");
-//        JLabel expDate = new JLabel("   Exp. Date");
-//        JTextField exp = new JTextField(" ");
-//        JLabel CVC = new JLabel("   CVS");
-//        JTextField cvc = new JTextField(" ");
         JTextField totalAmount = new JTextField("TOTAL:: " + Double.toString(order.getTotal()));
         pane.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -45,18 +37,17 @@ public class CashPaymentScreenView {
 
         cancelBtn.addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent e) {
-                MainScreenControl.showCheckoutScreen();
+                MainScreenControl.showCheckoutScreen(false);
             }
         });
 
         submitBtn.addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent e) {
-                MainScreenControl.showCheckoutScreen();
                 if (order.getOrderSize() > 0) {
                     DataAccess db = Main.getSQLiteAccess();
                     int orderId = db.saveNewOrder(order);
                     order.clearOrder();
-                    db.saveNewCustomer(new Customer(0, orderId, "Cash Payment", "0", "0", "None", "None", "None", "USA"));
+                    //db.saveNewCustomer(new Customer(0, orderId, "Cash Payment", "0", "0", "None", "None", "None", "USA"));
                 }
                 MainScreenControl.showMainScreen();
             }

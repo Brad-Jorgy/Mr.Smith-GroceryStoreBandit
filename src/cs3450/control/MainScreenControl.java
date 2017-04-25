@@ -49,11 +49,13 @@ public class MainScreenControl{
 		InventoryScreenView.addComponentsToPane(frame.getContentPane());
 		updateFrame();
 	}
-    public static void showCheckoutScreen()
+    public static void showCheckoutScreen(boolean showPopup)
     {
         frame.getContentPane().removeAll();
         CheckoutScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
         updateFrame();
+        if(showPopup)
+          CheckoutScreenControl.showPremiumCustomerPopup();
     }
 	public static void showReturnScreen()
 	{
@@ -103,13 +105,10 @@ public class MainScreenControl{
       return true;
     return false;
   }
+  public static String getCurrEmployeeName(){ return currEmployee.getName(); }
+  public static Employee getCurrEmployee(){ return currEmployee; }
 
-  public static String getCurrEmployeeName(){
-    return currEmployee.getName();
-  }
-  public static Employee getCurrEmployee(){
-    return currEmployee;
-  }
+  public static void setOrderPremium(boolean isPremium){ currentOrder.setPremium(isPremium); }
 
 	public static JFrame getFrame(){ return frame; }
   //public static DataAccess getSQLiteAccess(){ return sqliteAccess; }

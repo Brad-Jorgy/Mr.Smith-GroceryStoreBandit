@@ -28,9 +28,6 @@ public class SQLiteAdapter implements DataAccess{
     }
     MainScreenControl.showInventoryScreen();
   }
-
-
-
   public void saveNewProduct(Product product){
     Connection connection = null;
     try{
@@ -46,49 +43,6 @@ public class SQLiteAdapter implements DataAccess{
       System.out.println(e.getMessage());
     }
   }
-
-  public int saveNewOrder(Order order){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select count(*) from orders");
-      rs.next();
-      int maxCount = rs.getInt(1);
-      List<PurchaseItem> olist = order.getOrderList();
-      Iterator<PurchaseItem> orderIterator = olist.iterator();
-      PurchaseItem item = null;
-      while( orderIterator.hasNext()) {
-          item = orderIterator.next();
-          statement.executeUpdate("insert into orders values(" + (maxCount + 1) + ", " + item.getId() + ", " + item.getQuantity() + ")");
-      }
-      return maxCount + 1;
-    }
-    catch (SQLException e) {
-        System.out.println(e.getMessage());
-    }
-    return -1;
-  }
-
-  public int saveNewCustomer(Customer customer){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select count(*) from customers");
-      rs.next();
-      int maxCount = rs.getInt(1);
-      statement.executeUpdate("insert into customers values(" + (maxCount + 1) + ", " + customer.getOrderId() + ", '" + customer.getName() + "', '" + customer.getCreditCard() + "', '" + customer.getAddress() + "', '" + customer.getCity() + "', '" + customer.getState() + "', '" + customer.getZipcode() + "', '" + customer.getCountry() + "')");
-      return maxCount + 1;
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-    return -1;
-  }
-
   public Product loadProduct(int id){
     Connection connection = null;
     Product empty = new Product(0,"Empty",0,0,0,"Empty");
@@ -112,7 +66,78 @@ public class SQLiteAdapter implements DataAccess{
     }
     return empty;
   }
+  public void deleteProduct(Product product){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      statement.executeUpdate("delete from inventory where itemId="+product.getId());
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+  public ArrayList<Product> loadAllProducts(){
+    Connection connection = null;
+    ArrayList<Product> products = new ArrayList<Product>();
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select * from inventory");
+      while(rs.next()){
+        products.add(new Product(rs.getInt("itemId"), rs.getString("name"), rs.getDouble("price"), rs.getDouble("discountPrice"), rs.getInt("quantity"), rs.getString("provider")));
+      }
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return products;
+  }
+  public boolean isValidProductId(int id){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select * from inventory where itemId="+id);
+      return rs.next();
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return false;
+  }
+  public int getNewProductId(){
+    Connection connection = null;
+    return -1;
+  }
 
+
+  public int saveNewOrder(Order order){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from orders");
+      rs.next();
+      int maxCount = rs.getInt(1) + 1;
+      List<PurchaseItem> olist = order.getOrderList();
+      Iterator<PurchaseItem> orderIterator = olist.iterator();
+      PurchaseItem item = null;
+      while( orderIterator.hasNext()) {
+          item = orderIterator.next();
+          statement.executeUpdate("insert into orders values(" + maxCount + ", " + item.getId() + ", " + item.getQuantity() + ")");
+      }
+      return maxCount;
+    }
+    catch (SQLException e) {
+        System.out.println(e.getMessage());
+    }
+    return -1;
+  }
   public Order getOrder(int id){
     Connection connection = null;
     Order empty = new Order();
@@ -138,54 +163,6 @@ public class SQLiteAdapter implements DataAccess{
     }
     return empty;
   }
-  public ArrayList<Product> loadAllProducts(){
-    Connection connection = null;
-    ArrayList<Product> products = new ArrayList<Product>();
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select * from inventory");
-      while(rs.next()){
-        products.add(new Product(rs.getInt("itemId"), rs.getString("name"), rs.getDouble("price"), rs.getDouble("discountPrice"), rs.getInt("quantity"), rs.getString("provider")));
-      }
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-    return products;
-  }
-  public void deleteProduct(Product product){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      statement.executeUpdate("delete from inventory where itemId="+product.getId());
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-  }
-  public boolean isValidProductId(int id){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select * from inventory where itemId="+id);
-      return rs.next();
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-    return false;
-  }
-  public int getNewProductId(){
-    Connection connection = null;
-    return -1;
-  }
-
   public void updateOrderInventory(PurchaseItem item) {
     Connection connection = null;
     Product prodIn = loadProduct(item.getId());
@@ -199,6 +176,53 @@ public class SQLiteAdapter implements DataAccess{
       System.out.println(e.getMessage());
     }
     MainScreenControl.showInventoryScreen();
+  }
+
+  public int saveNewCustomer(Customer customer){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from customers");
+      rs.next();
+      int maxCount = rs.getInt(1);
+      statement.executeUpdate("insert into customers values(" + (maxCount + 1) + ", '" + customer.getName() + "', " + customer.getPremium() + ", " + customer.getRewardPoints() + ")");
+      return maxCount + 1;
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return -1;
+  }
+  public Customer loadCustomer(int id){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select * from customers where customerId="+id);
+      if(rs.next())
+        return new Customer(rs.getInt("customerId"), rs.getString("name"), rs.getBoolean("premium"), rs.getInt("rewardPoints"));
+    }
+    catch(SQLException e){
+      System.out.println(e.getMessage());
+    }
+    return null;
+  }
+  public boolean isValidCustomerId(int id){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select * from customers where customerId="+id);
+      return rs.next();
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return false;
   }
 
   public void saveEmployee(Employee employee){
