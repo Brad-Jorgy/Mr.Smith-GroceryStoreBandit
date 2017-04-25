@@ -20,6 +20,7 @@ public interface DataAccess{
   public void deleteEmployee(Employee employee);
   public int getUserId(String username, String password);
   public int getNewEmployeeId();
-  public void updateOrderInventory(PurchaseItem item);
+  public void updateItemsCount(PurchaseItem item);
+  public void updateOrderInventory(PurchaseItem item, boolean itemReturn);
 
 };

@@ -13,37 +13,33 @@ import cs3450.control.MainScreenControl;
 
 public class SQLiteAdapter implements DataAccess {
 
-  public void saveProduct(Product product){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      statement.executeUpdate("update inventory set name='"+product.getName()+"', price="+product.getPrice()+", quantity="+product.getQuantity()+", provider='"+product.getProvider()+"' where itemId="+product.getId());
+    public void saveProduct(Product product) {
+        Connection connection = null;
+        try {
+            connection = Main.getDbConnection();
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            statement.executeUpdate("update inventory set name='" + product.getName() + "', price=" + product.getPrice() + ", quantity=" + product.getQuantity() + ", provider='" + product.getProvider() + "' where itemId=" + product.getId());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        MainScreenControl.showInventoryScreen();
     }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-    MainScreenControl.showInventoryScreen();
-  }
 
-
-
-  public void saveNewProduct(Product product){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select count(*) from inventory");
-      rs.next();
-      int maxCount = rs.getInt(1);
-      statement.executeUpdate("insert into inventory values(" + (maxCount + 1) + ", '" + product.getName() + "', " + product.getPrice() + ", " + product.getQuantity() + ", '" + product.getProvider() + "')");
+    public void saveNewProduct(Product product) {
+        Connection connection = null;
+        try {
+            connection = Main.getDbConnection();
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            ResultSet rs = statement.executeQuery("select count(*) from inventory");
+            rs.next();
+            int maxCount = rs.getInt(1);
+            statement.executeUpdate("insert into inventory values(" + (maxCount + 1) + ", '" + product.getName() + "', " + product.getPrice() + ", " + product.getQuantity() + ", '" + product.getProvider() + "')");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-  }
 
     public int saveOrderItem(PurchaseItem orderItem) {
         Connection connection = null;
@@ -71,6 +67,19 @@ public class SQLiteAdapter implements DataAccess {
         return -1;
     }
 
+    public void updateItemsCount(PurchaseItem orderItem){
+        Connection connection = null;
+        try {
+            connection = Main.getDbConnection();
+            PreparedStatement statement = connection.prepareStatement("update inventory set quantity = ? where itemId = ?");
+            statement.setInt(1, orderItem.getQuantity());
+            statement.setInt(2, orderItem.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public int saveNewOrder(Order order) {
         Connection connection = null;
         int orderId, orderItemId;
@@ -79,8 +88,7 @@ public class SQLiteAdapter implements DataAccess {
             List<PurchaseItem> olist = order.getOrderList();
             Iterator<PurchaseItem> orderIterator = olist.iterator();
             PurchaseItem item = null;
-            String sqlString = "insert into orders (customerId)values(?)";
-            PreparedStatement pstmt = connection.prepareStatement(sqlString);
+            PreparedStatement pstmt = connection.prepareStatement("insert into orders (customerId)values(?)");
             pstmt.setInt(1, order.getOrderCustomer());
             pstmt.executeUpdate();
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
@@ -90,9 +98,8 @@ public class SQLiteAdapter implements DataAccess {
                     throw new SQLException("Creating order failed, no ID obtained.");
                 }
             }
-            sqlString = "insert into orderItem (customerId,orderId,itemId,quantity)values(?,?,?,?)";
-            pstmt = connection.prepareStatement(sqlString);
 
+            pstmt = connection.prepareStatement("insert into orderItem (customerId,orderId,itemId,quantity)values(?,?,?,?)");
             while (orderIterator.hasNext()) {
                 item = orderIterator.next();
                 pstmt.setInt(1, order.getOrderCustomer());
@@ -145,29 +152,27 @@ public class SQLiteAdapter implements DataAccess {
         return -1;
     }
 
-  public Product loadProduct(int id){
-    Connection connection = null;
-    Product empty = new Product(0,"Empty",0,0,"Empty");
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select count(*) from inventory");
-      rs.next();
-      int maxCount = rs.getInt(1);
-      if(id > maxCount || id < 1){
-          System.out.println("Invalid itemId");
-      }
-      else{
-          rs = statement.executeQuery("select * from inventory where itemId="+id);
-          return new Product(id, rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider"));
-      }
+    public Product loadProduct(int id) {
+        Connection connection = null;
+        Product empty = new Product(0, "Empty", 0, 0, "Empty");
+        try {
+            connection = Main.getDbConnection();
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            ResultSet rs = statement.executeQuery("select count(*) from inventory");
+            rs.next();
+            int maxCount = rs.getInt(1);
+            if (id > maxCount || id < 1) {
+                System.out.println("Invalid itemId");
+            } else {
+                rs = statement.executeQuery("select * from inventory where itemId=" + id);
+                return new Product(id, rs.getString("name"), rs.getDouble("price"), rs.getInt("quantity"), rs.getString("provider"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return empty;
     }
-    catch (SQLException e) {
-        System.out.println(e.getMessage());
-    }
-    return empty;
-  }
 
     public Order getOrder(int id) {
         Connection connection = null;
@@ -244,123 +249,123 @@ public class SQLiteAdapter implements DataAccess {
         return -1;
     }
 
-    public void updateOrderInventory(PurchaseItem item) {
+    public void updateOrderInventory(PurchaseItem item, boolean isReturn) {
         Connection connection = null;
         Product prodIn = loadProduct(item.getId());
-        int newCount;
-            newCount = prodIn.getQuantity() + item.getQuantity();
-            if(newCount < 0){
-                newCount = 0;
+        try {
+            connection = Main.getDbConnection();
+            int currentQuantity = prodIn.getQuantity();
+            if(isReturn) {
+                currentQuantity += item.getQuantity();
+            } else {
+                currentQuantity -= item.getQuantity();
             }
+            PreparedStatement statement = connection.prepareStatement("update inventory set quantity = ? where itemId = ?");
+            statement.setInt(1, currentQuantity);
+            statement.setInt(2, item.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void saveEmployee(Employee employee) {
+        Connection connection = null;
         try {
             connection = Main.getDbConnection();
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);
-            statement.executeUpdate("update inventory set name='" + prodIn.getName() + "', price=" + prodIn.getPrice() + ", quantity=" + newCount + ", provider='" + prodIn.getProvider() + "' where itemId=" + prodIn.getId());
+            statement.executeUpdate("update employees set name='" + employee.getName() + "', username='" + employee.getUsername() + "', password='" + employee.getPassword() + "', position='" + employee.getPosition() + "' where employeeId=" + employee.getId());
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        MainScreenControl.showInventoryScreen();
+        MainScreenControl.showEmployeeScreen();
     }
 
-  public void saveEmployee(Employee employee){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      statement.executeUpdate("update employees set name='"+employee.getName()+"', username='"+employee.getUsername()+"', password='"+employee.getPassword()+"', position='" + employee.getPosition()+"' where employeeId="+employee.getId());
+    public Employee loadEmployee(int id) {
+        Connection connection = null;
+        try {
+            connection = Main.getDbConnection();
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            ResultSet rs = statement.executeQuery("select * from employees where employeeId=" + id);
+            if (rs.next())
+                return new Employee(rs.getInt("employeeId"), rs.getString("name"), rs.getBinaryStream("image"), rs.getString("username"), rs.getString("password"), rs.getString("position"));
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
+
+    public void saveNewEmployee(Employee employee) {
+        Connection connection = null;
+        try {
+            connection = Main.getDbConnection();
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            statement.executeUpdate("insert into employees values(" + employee.getId() + ", '" + employee.getName() + "', " + employee.getImage() + ", '" + employee.getUsername() + "', '" + employee.getPassword() + "', '" + employee.getPosition() + "')");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
-    MainScreenControl.showEmployeeScreen();
-  }
-  public Employee loadEmployee(int id){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select * from employees where employeeId="+id);
-      if(rs.next())
-        return new Employee(rs.getInt("employeeId"), rs.getString("name"), rs.getBinaryStream("image"), rs.getString("username"), rs.getString("password"), rs.getString("position"));
+
+    public ArrayList<Employee> loadAllEmployees() {
+        Connection connection = null;
+        ArrayList<Employee> employees = new ArrayList<Employee>();
+        try {
+            connection = Main.getDbConnection();
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            ResultSet rs = statement.executeQuery("select * from employees");
+            while (rs.next()) {
+                employees.add(new Employee(rs.getInt("employeeId"), rs.getString("name"), rs.getBinaryStream("image"), rs.getString("username"), rs.getString("password"), rs.getString("position")));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return employees;
     }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
+
+    public void deleteEmployee(Employee employee) {
+        Connection connection = null;
+        try {
+            connection = Main.getDbConnection();
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            statement.executeUpdate("delete from employees where employeeId=" + employee.getId());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
-    return null;
-  }
-  public void saveNewEmployee(Employee employee){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      statement.executeUpdate("insert into employees values(" + employee.getId() + ", '" + employee.getName() + "', " + employee.getImage() + ", '" + employee.getUsername() + "', '" + employee.getPassword() + "', '" + employee.getPosition() +"')");
+
+    public int getUserId(String username, String password) {
+        Connection connection = null;
+        try {
+            connection = Main.getDbConnection();
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            ResultSet rs = statement.executeQuery("select * from employees where username='" + username + "' and password='" + password + "'");
+            if (rs.next())
+                return rs.getInt("employeeId");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return -1;
     }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
+
+    public int getNewEmployeeId() {
+        Connection connection = null;
+        try {
+            connection = Main.getDbConnection();
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            ResultSet rs = statement.executeQuery("select count(*) from employees");
+            rs.next();
+            int maxCount = rs.getInt(1);
+            return maxCount + 1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return -1;
     }
-  }
-  public ArrayList<Employee> loadAllEmployees(){
-    Connection connection = null;
-    ArrayList<Employee> employees = new ArrayList<Employee>();
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select * from employees");
-      while(rs.next()){
-        employees.add(new Employee(rs.getInt("employeeId"), rs.getString("name"), rs.getBinaryStream("image"), rs.getString("username"), rs.getString("password"), rs.getString("position")));
-      }
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-    return employees;
-  }
-  public void deleteEmployee(Employee employee){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      statement.executeUpdate("delete from employees where employeeId="+employee.getId());
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-  }
-  public int getUserId(String username, String password){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select * from employees where username='" + username +"' and password='" + password + "'");
-      if(rs.next())
-        return rs.getInt("employeeId");
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-    return -1;
-  }
-  public int getNewEmployeeId(){
-    Connection connection = null;
-    try{
-      connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select count(*) from employees");
-      rs.next();
-      int maxCount = rs.getInt(1);
-      return maxCount + 1;
-    }
-    catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-    return -1;
-  }
 };

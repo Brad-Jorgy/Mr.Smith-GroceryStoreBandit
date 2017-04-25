@@ -5,6 +5,7 @@ public class PurchaseItem {
 	private int mOrderId;
 	private Product mProduct;
 	private int mQuantity;
+	private int quantityChange;
 
 	public PurchaseItem(int customerId, int orderId, Product product, int quantity) {
 		mCustomerId = customerId;
@@ -33,7 +34,11 @@ public class PurchaseItem {
 		return mProduct;
 	}
 
-	public void setQuantity(int quantity) { mQuantity = quantity; }
+	public void setQuantityChange(int quantitySet){quantityChange = quantitySet;}
+
+	public int getQuantityChange(){return quantityChange;}
+
+	//public void setQuantity(int quantity) { mQuantity = quantity; }
 
 	@Override
 	public String toString() {

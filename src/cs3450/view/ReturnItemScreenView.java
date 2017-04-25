@@ -28,7 +28,6 @@ public class ReturnItemScreenView {
             JButton editQuantityBtn = new JButton("Edit Quantity");
             JButton submitBtn = new JButton("Submit Return");
 
-
             DefaultListModel listModel = new DefaultListModel();
             java.util.List<PurchaseItem> olist = order.getOrderList();
             Iterator<PurchaseItem> orderIterator = olist.iterator();

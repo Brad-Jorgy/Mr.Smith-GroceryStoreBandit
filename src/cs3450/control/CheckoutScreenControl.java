@@ -21,17 +21,18 @@ public class CheckoutScreenControl {
         popupPanel.setLayout(new GridLayout(3,8));
         JTextField quantityTF = new JTextField(nf.format(purchaseItem.getQuantity()), 4);
         JTextField productNumTF = new JTextField(nf.format(purchaseItem.getId()), 4);
-
         popupPanel.add(new JLabel("Quantity: "));
         popupPanel.add(quantityTF);
 
         int result = JOptionPane.showConfirmDialog(null, popupPanel, "Edit Quantity", JOptionPane.OK_CANCEL_OPTION);
         if(result == JOptionPane.OK_OPTION){
-            int count = Integer.parseInt(quantityTF.getText());
-            if(count <= 0) {
-                order.removeItem(purchaseItem.getProduct());
+            int requestedQuantity = Integer.parseInt(quantityTF.getText());
+            DataAccess db = Main.getSQLiteAccess();
+            int availableQuantity = db.loadProduct(purchaseItem.getProduct().getId()).getQuantity();
+            if(availableQuantity < requestedQuantity){
+                order.editItem(purchaseItem.getProduct(), availableQuantity);
             } else {
-                order.editItem(purchaseItem.getProduct(), Integer.parseInt(quantityTF.getText()));
+                order.editItem(purchaseItem.getProduct(), requestedQuantity);
             }
         }
         else{
@@ -62,10 +63,11 @@ public class CheckoutScreenControl {
     static public void updateDB(Order order) {
         List<PurchaseItem> olist = order.getOrderList();
         Iterator<PurchaseItem> orderIterator = olist.iterator();
+        DataAccess db;
         while( orderIterator.hasNext()) {
             PurchaseItem item = orderIterator.next();
-            DataAccess db = Main.getSQLiteAccess();
-            db.updateOrderInventory(item);
+            db = Main.getSQLiteAccess();
+            db.updateOrderInventory(item, false);
         }
     }
 

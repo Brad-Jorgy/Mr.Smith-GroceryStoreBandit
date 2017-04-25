@@ -30,8 +30,17 @@ public class ReturnItemScreenControl {
         popupPanel.add(quantityTF);
 
         int result = JOptionPane.showConfirmDialog(null, popupPanel, "Edit Quantity", JOptionPane.OK_CANCEL_OPTION);
+        int value;
         if(result == JOptionPane.OK_OPTION){
-            order.editItem(purchaseItem.getProduct(), -Integer.parseInt(quantityTF.getText()));
+            int requestedQuantity = Integer.parseInt(quantityTF.getText());
+            DataAccess db = Main.getSQLiteAccess();
+            int availableQuantity = db.loadProduct(purchaseItem.getProduct().getId()).getQuantity();
+            if(availableQuantity < requestedQuantity){
+                order.editItem(purchaseItem.getProduct(), availableQuantity);
+            } else {
+                order.editItem(purchaseItem.getProduct(), requestedQuantity);
+            }
+       //     order.editItem(purchaseItem.getProduct(), Integer.parseInt(quantityTF.getText()));
         }
         else{
             System.out.println("Fail save");
@@ -65,7 +74,8 @@ public class ReturnItemScreenControl {
         while( orderIterator.hasNext()) {
             PurchaseItem item = orderIterator.next();
             DataAccess db = Main.getSQLiteAccess();
-            db.updateOrderInventory(item);
+  //          db.updateItemsCount(item);
+            db.updateOrderInventory(item, true);
         }
     }
 

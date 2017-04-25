@@ -69,7 +69,7 @@ public class CustomerPickScreenControl {
         while( orderIterator.hasNext()) {
             PurchaseItem item = orderIterator.next();
             DataAccess db = Main.getSQLiteAccess();
-            db.updateOrderInventory(item);
+            db.updateOrderInventory(item, false);
         }
     }
 
