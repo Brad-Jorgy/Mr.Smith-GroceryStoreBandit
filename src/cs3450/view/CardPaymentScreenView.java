@@ -46,7 +46,7 @@ public class CardPaymentScreenView {
 
         cancelBtn.addMouseListener(new MouseAdapter(){
             public void mousePressed(MouseEvent e) {
-                MainScreenControl.showCheckoutScreen();
+                MainScreenControl.showCheckoutScreen(false);
             }
         });
 
@@ -58,7 +58,7 @@ public class CardPaymentScreenView {
                     int orderId = db.saveNewOrder(order);
                     CheckoutScreenControl.updateDB(order);
                     order.clearOrder();
-                    db.saveNewCustomer(new Customer(0, orderId, name.getText(), "0", "0", "None", "None", "None", "USA"));
+                    //db.saveNewCustomer(new Customer(0, orderId, name.getText(), "0", "0", "None", "None", "None", "USA"));
                 }
                 MainScreenControl.showMainScreen();
             }

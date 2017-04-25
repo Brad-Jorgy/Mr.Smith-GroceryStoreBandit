@@ -10,33 +10,28 @@ public class Order {
 	private Map<Product, Integer> mItemsList;
 	private int orderNumber;
 	private double mTotal;
+	private boolean isPremium = false;
 
 	public Order() {
 		mItemsList = new HashMap<Product, Integer>();
 		mTotal = 0;
 	}
-
 	public Order(Product product, Integer id) {
 		mItemsList = new HashMap<Product, Integer>();
 		mTotal = 0;
 	}
 
-	public int getOrderNumber() {
-		return orderNumber;
-	}
-
-	public void setOrderNumber(int orderNum) {
-		 orderNumber = orderNum;
-	}
-
+	public int getOrderNumber() {	return this.orderNumber;	}
+	public void setOrderNumber(int orderNumber) { this.orderNumber = orderNumber; }
+	public int getOrderSize() {	return mItemsList.size(); }
+	public int getItem(Product product) {	return mItemsList.get(product);	}
+	public double getTotal() { return mTotal; }
 	public void clearOrder() {
 		mItemsList.clear();
+		orderNumber = -1;
+		mTotal = 0;
+		isPremium = false;
 	}
-
-	public int getItem(Product product) {
-		return mItemsList.get(product);
-	}
-
 	public void addItem(Product product, int quantity) {
 		Integer q = mItemsList.get(product);
 		if (q == null) {
@@ -45,26 +40,29 @@ public class Order {
 			q = q + quantity;
 		}
 		mItemsList.put(product, q);
-		mTotal = mTotal + product.getPrice() * quantity;
+		if(isPremium)
+			mTotal = mTotal + product.getDiscountPrice() * quantity;
+		else
+			mTotal = mTotal + product.getPrice() * quantity;
 	}
-
 	public void editItem(Product product, int quantity) {
 		Integer q = mItemsList.get(product);
 		if (q != null) {
 			mItemsList.put(product, quantity);
-			mTotal = mTotal - product.getPrice() * (q - quantity);
+			if(isPremium)
+				mTotal = mTotal - product.getDiscountPrice() * (q - quantity);
+			else
+				mTotal = mTotal - product.getPrice() * (q - quantity);
 		}
 	}
-
-	public int getOrderSize() {
-		return mItemsList.size();
-	}
-
 	public void removeItem(Product product) {
 		Integer q = mItemsList.get(product);
 		if (q != null) {
 			mItemsList.remove(product);
-			mTotal = mTotal - product.getPrice() * q;
+			if(isPremium)
+				mTotal = mTotal - product.getDiscountPrice() * q;
+			else
+				mTotal = mTotal - product.getPrice() * q;
 		}
 	}
 
@@ -78,7 +76,5 @@ public class Order {
 		return itemList;
 	}
 
-	public double getTotal() {
-		return mTotal;
-	}
+	public void setPremium(boolean isPremium){ this.isPremium = isPremium; }
 }

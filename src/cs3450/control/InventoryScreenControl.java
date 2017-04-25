@@ -75,7 +75,7 @@ public class InventoryScreenControl{
       popupPanel.add(new JLabel("Provider: "));
       popupPanel.add(providerTF);
       int result = JOptionPane.showConfirmDialog(null, popupPanel, "Add Product:", JOptionPane.OK_CANCEL_OPTION);
-      if(result ==JOptionPane.OK_OPTION){
+      if(result == JOptionPane.OK_OPTION){
         if(areValuesValid(priceTF.getText(), discountPriceTF.getText(), quantityTF.getText())){
           DataAccess db = Main.getSQLiteAccess();
           Product product = new Product(9867, nameTF.getText(), Double.parseDouble(priceTF.getText()), Double.parseDouble(discountPriceTF.getText()), Integer.parseInt(quantityTF.getText()), providerTF.getText());

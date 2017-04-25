@@ -39,12 +39,17 @@ public interface DataAccess{
   public void saveProduct(Product product);
   public Product loadProduct(int id);
   public void saveNewProduct(Product product);
-  public int saveNewOrder(Order order);
-  public int saveNewCustomer(Customer customer);
   public ArrayList<Product> loadAllProducts();
   public void deleteProduct(Product product);
   public boolean isValidProductId(int id);
+
+  public int saveNewOrder(Order order);
   public Order getOrder(int id);
+  public void updateOrderInventory(PurchaseItem item);
+
+  public int saveNewCustomer(Customer customer);
+  public Customer loadCustomer(int id);
+  public boolean isValidCustomerId(int id);
 
   public void saveEmployee(Employee employee);
   public Employee loadEmployee(int id);
@@ -53,6 +58,4 @@ public interface DataAccess{
   public void deleteEmployee(Employee employee);
   public int getUserId(String username, String password);
   public int getNewEmployeeId();
-  public void updateOrderInventory(PurchaseItem item);
-
 };

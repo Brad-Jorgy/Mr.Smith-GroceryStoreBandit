@@ -36,15 +36,13 @@ public class CheckoutScreenView{
         Iterator<PurchaseItem> orderIterator = olist.iterator();
         while( orderIterator.hasNext()) {
             PurchaseItem item = orderIterator.next();
-            listModel.addElement(item);
-//            listModel.addElement(item.getId()+": "+item.getProduct().getName() +" $"+item.getProduct().getPrice()+", "+item.getProduct().getQuantity()+" in stock, ("+item.getProduct().getProvider()+")");
-
+            if(CheckoutScreenControl.isCurrCustomerPremium())
+              listModel.addElement(item.toStringDiscount());
+            else
+              listModel.addElement(item);
         }
         JList list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        ListSelectionModel listSelectionModel = list.getSelectionModel();
-//        listSelectionModel.addListSelectionListener(
-//                new SharedListSelectionHandler());
         list.setSelectedIndex(0);
         list.setVisibleRowCount(5);
 
@@ -81,8 +79,8 @@ public class CheckoutScreenView{
 
         backBtn.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                order.clearOrder();
-            MainScreenControl.showMainScreen();
+              order.clearOrder();
+              MainScreenControl.showMainScreen();
             }
         });
 
