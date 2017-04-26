@@ -1,7 +1,11 @@
 package cs3450.view;
 
+import cs3450.control.CheckoutScreenControl;
+import cs3450.control.Main;
 import cs3450.control.ReturnItemScreenControl;
 import cs3450.control.MainScreenControl;
+import cs3450.model.Customer;
+import cs3450.model.DataAccess;
 import cs3450.model.Order;
 import cs3450.model.PurchaseItem;
 
@@ -22,8 +26,7 @@ public class ReturnItemScreenView {
             JButton selectOrderNumBtn = new JButton("Select Order");
             JButton deleteBtn = new JButton("Delete Item");
             JButton editQuantityBtn = new JButton("Edit Quantity");
-            JButton processReturnBtn = new JButton("Process Return");
-
+            JButton submitBtn = new JButton("Submit Return");
 
             DefaultListModel listModel = new DefaultListModel();
             java.util.List<PurchaseItem> olist = order.getOrderList();
@@ -66,9 +69,9 @@ public class ReturnItemScreenView {
             c.gridx = 3;
             pane.add(editQuantityBtn, c);
             c.gridx = 4;
-            pane.add(processReturnBtn, c);
-            c.gridx = 5;
             pane.add(selectOrderNumBtn, c);
+            c.gridx = 5;
+            pane.add(submitBtn, c);
 
 
 
@@ -80,13 +83,18 @@ public class ReturnItemScreenView {
 
             editQuantityBtn.addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
-                    //ReturnItemScreenControl.showEditQuantityPopup((PurchaseItem)list.getSelectedValue());
+                    ReturnItemScreenControl.showEditQuantityPopup((PurchaseItem)list.getSelectedValue(), order);
+                    ReturnItemScreenControl.updateReturnScreen(order);
                 }
             });
 
-           processReturnBtn.addMouseListener(new MouseAdapter() {
+            submitBtn.addMouseListener(new MouseAdapter(){
                 public void mousePressed(MouseEvent e) {
-//                    ReturnItemScreenControl.showCardPaymentScreen(MainScreenControl.getFrame(), order);
+//                MainScreenControl.showCheckoutScreen();
+                    if (order.getOrderSize() > 0) {
+                        DataAccess db = Main.getSQLiteAccess();
+                        //CheckoutScreenControl.updateDB(order);
+                    }
                     MainScreenControl.showMainScreen();
                 }
             });
@@ -101,6 +109,7 @@ public class ReturnItemScreenView {
                 public void mousePressed(MouseEvent e) {
                     order.removeItem(((PurchaseItem)list.getSelectedValue()).getProduct());
                   // ReturnItemScreenControl.deleteItem((PurchaseItem)list.getSelectedValue() );
+                    ReturnItemScreenControl.updateReturnScreen(order);
                 }
             });
 

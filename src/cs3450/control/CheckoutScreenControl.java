@@ -6,10 +6,12 @@ import java.text.NumberFormat;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 import java.util.List;
+import java.lang.*;
 import cs3450.model.*;
 
 import cs3450.view.CardPaymentScreenView;
 import cs3450.view.CashPaymentScreenView;
+
 
 public class CheckoutScreenControl {
     private static Customer currCustomer = null;
@@ -53,18 +55,16 @@ public class CheckoutScreenControl {
         popupPanel.setLayout(new GridLayout(3,8));
         JTextField quantityTF = new JTextField(nf.format(purchaseItem.getQuantity()), 4);
         JTextField productNumTF = new JTextField(nf.format(purchaseItem.getId()), 4);
-
         popupPanel.add(new JLabel("Quantity: "));
         popupPanel.add(quantityTF);
 
         int result = JOptionPane.showConfirmDialog(null, popupPanel, "Edit Quantity", JOptionPane.OK_CANCEL_OPTION);
         if(result == JOptionPane.OK_OPTION){
-            int count = Integer.parseInt(quantityTF.getText());
-            if(count <= 0) {
-                order.removeItem(purchaseItem.getProduct());
-            } else {
-                order.editItem(purchaseItem.getProduct(), Integer.parseInt(quantityTF.getText()));
-            }
+            int requestedQuantity = Integer.parseInt(quantityTF.getText());
+            purchaseItem.setQuantityChange(purchaseItem.getQuantity()+requestedQuantity);
+//            order.addItemCount(purchaseItem, requestedQuantity+purchaseItem.getQuantity());
+//            DataAccess db = Main.getSQLiteAccess();
+//            db.updateItemsCount(purchaseItem, requestedQuantity+purchaseItem.getQuantity());
         }
         else{
             System.out.println("Fail save");
@@ -76,7 +76,9 @@ public class CheckoutScreenControl {
         JPanel popupPanel = new JPanel();
         popupPanel.setLayout(new GridLayout(5, 2));
         JTextField idTF = new JTextField();
+        //JTextField priceTF = new JTextField();
         JTextField quantityTF = new JTextField();
+        //JTextField providerTF = new JTextField();
         popupPanel.add(new JLabel("Product Id: "));
         popupPanel.add(idTF);
         popupPanel.add(new JLabel("Quantity: "));
@@ -92,10 +94,11 @@ public class CheckoutScreenControl {
     static public void updateDB(Order order) {
         List<PurchaseItem> olist = order.getOrderList();
         Iterator<PurchaseItem> orderIterator = olist.iterator();
+        DataAccess db;
         while( orderIterator.hasNext()) {
             PurchaseItem item = orderIterator.next();
-            DataAccess db = Main.getSQLiteAccess();
-            db.updateOrderInventory(item);
+            db = Main.getSQLiteAccess();
+            db.updateOrderInventory(item, false);
         }
     }
 

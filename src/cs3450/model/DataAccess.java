@@ -45,7 +45,6 @@ public interface DataAccess{
 
   public int saveNewOrder(Order order);
   public Order getOrder(int id);
-  public void updateOrderInventory(PurchaseItem item);
 
   public int saveNewCustomer(Customer customer);
   public Customer loadCustomer(int id);
@@ -58,4 +57,7 @@ public interface DataAccess{
   public void deleteEmployee(Employee employee);
   public int getUserId(String username, String password);
   public int getNewEmployeeId();
+  public void updateItemsCount(PurchaseItem item, int countChange);
+  public void updateOrderInventory(PurchaseItem item, boolean itemReturn);
+
 };

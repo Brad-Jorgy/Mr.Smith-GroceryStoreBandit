@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 import cs3450.control.Main;
 import cs3450.view.MainScreenView;
@@ -114,7 +115,26 @@ public class SQLiteAdapter implements DataAccess{
     return -1;
   }
 
+  public void updateItemsCount(PurchaseItem orderItem, int countChange){
+    Connection connection = null;
+    try {
+      connection = Main.getDbConnection();
+      PreparedStatement statement = connection.prepareStatement("update orderItem set quantity = ? where itemId = ? and orderId = ?");
+      statement.setQueryTimeout(30);
+      statement.setInt(1, orderItem.getQuantity() + countChange);
+      statement.setInt(2, orderItem.getProduct().getId());
+      statement.setInt(3,orderItem.getOrderId());
+      statement.executeUpdate();
 
+      statement = connection.prepareStatement("update inventory set quantity = ? where itemId = ?");
+      statement.setQueryTimeout(30);
+      statement.setInt(1, orderItem.getProduct().getQuantity() - countChange);
+      statement.setInt(2, orderItem.getProduct().getId());
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+  }
   public int saveNewOrder(Order order){
     Connection connection = null;
     try{
@@ -163,7 +183,7 @@ public class SQLiteAdapter implements DataAccess{
     }
     return empty;
   }
-  public void updateOrderInventory(PurchaseItem item) {
+  public void updateOrderInventory(PurchaseItem item, boolean h) {
     Connection connection = null;
     Product prodIn = loadProduct(item.getId());
     int newCount = prodIn.getQuantity() - item.getQuantity();

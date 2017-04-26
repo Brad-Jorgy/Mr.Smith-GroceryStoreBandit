@@ -2,6 +2,7 @@ package cs3450.model;
 
 public class Customer {
     private int customerId;
+    //private int orderId;
     private String name;
     private boolean premium;
     private int rewardPoints;
