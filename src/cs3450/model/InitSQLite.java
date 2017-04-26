@@ -40,14 +40,14 @@ public class InitSQLite {
             statement.executeUpdate("create table if not exists inventory (itemId integer primary key, name string, price double, discountPrice double, quantity integer, provider string)");
             statement.executeUpdate("create table if not exists orders (orderId integer primary key, itemId integer, quantity integer)");
             statement.executeUpdate("create table if not exists purchaseHistory (orderId integer primary key, customerId integer, date datetime)");
-            statement.executeUpdate("create table if not exists customers (customerId integer primary key, name string, premium boolean, rewardPoints integer)");
+            statement.executeUpdate("create table if not exists customers (customerId integer primary key, name string, rewardPoints integer)");
             statement.executeUpdate("create table if not exists employees (employeeId integer primary key, name string, image blob, username string, password string, position string)");
             ResultSet rs = statement.executeQuery("select * from employees");
             if(!rs.next())
               statement.executeUpdate("insert into employees values(1, 'Default Manager', null, 'manager', '12345', 'Manager')");
             rs = statement.executeQuery("select * from customers");
             if(!rs.next())
-              statement.executeUpdate("insert into customers values(331993, 'Sam Christiansen', 1, 0)");
+              statement.executeUpdate("insert into customers values(331993, 'Sam Christiansen', 0)");
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }

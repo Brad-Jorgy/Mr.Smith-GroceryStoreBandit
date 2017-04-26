@@ -16,8 +16,8 @@ public class CheckoutScreenControl {
 
     static public void showPremiumCustomerPopup(){
       JPanel popupPanel = new JPanel();
-      popupPanel.add(new JLabel("Is the customer a premium customer?"));
-      int result = JOptionPane.showConfirmDialog(null, popupPanel, "Premium?", JOptionPane.YES_NO_OPTION);
+      popupPanel.add(new JLabel("Is the customer a loyalty customer?"));
+      int result = JOptionPane.showConfirmDialog(null, popupPanel, "Loyalty Customer?", JOptionPane.YES_NO_OPTION);
       if(result == JOptionPane.YES_OPTION){
         popupPanel = new JPanel();
         JTextField idTF = new JTextField();
@@ -41,6 +41,32 @@ public class CheckoutScreenControl {
             setCurrCustomer(-1);
           }
         }
+      }
+      else if(result == JOptionPane.NO_OPTION){
+        popupPanel = new JPanel();
+        popupPanel.add(new JLabel("Does the customer want to become a loyalty customer?"));
+        result = JOptionPane.showConfirmDialog(null, popupPanel, "Loyalty Customer?", JOptionPane.YES_NO_OPTION);
+        if(result == JOptionPane.YES_OPTION){
+          DataAccess db = Main.getSQLiteAccess();
+          int newId = db.getNextCustomerId();
+          popupPanel = new JPanel();
+          popupPanel.setLayout(new GridLayout(2,2));
+          JTextField nameTF = new JTextField("", 20);
+          popupPanel.add(new JLabel("Customer's Id: "));
+          popupPanel.add(new JLabel("" + newId));
+          popupPanel.add(new JLabel("Name: "));
+          popupPanel.add(nameTF);
+          result = JOptionPane.showConfirmDialog(null, popupPanel, "Customer Info", JOptionPane.OK_CANCEL_OPTION);
+          if(result == JOptionPane.OK_OPTION){
+            Customer newCustomer = new Customer(newId, nameTF.getText(), 0);
+            db.saveNewCustomer(newCustomer);
+            setCurrCustomer(newId);
+          }
+          else
+            setCurrCustomer(-1);
+        }
+        else
+          setCurrCustomer(-1);
       }
       else
         setCurrCustomer(-1);
@@ -120,10 +146,10 @@ public class CheckoutScreenControl {
         MainScreenControl.updateFrame();
     }
 
-    public static boolean isCurrCustomerPremium(){
+    public static boolean isLoyalCustomer(){
       if(currCustomer == null)
         return false;
-      return currCustomer.getPremium();
+      return true;
     }
     public static void setCurrCustomer(int customerId) {
       DataAccess db = Main.getSQLiteAccess();
@@ -133,7 +159,7 @@ public class CheckoutScreenControl {
       }
       else{
         currCustomer = db.loadCustomer(customerId);
-        MainScreenControl.setOrderPremium(currCustomer.getPremium());
+        MainScreenControl.setOrderPremium(isLoyalCustomer());
       }
     }
 };

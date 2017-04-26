@@ -80,6 +80,7 @@ public class XLSAdapter implements DataAccess{
   public int saveNewCustomer(Customer customer) {return 0;}
   public Customer loadCustomer(int id) { return null; }
   public boolean isValidCustomerId(int id) { return false; }
+  public int getNextCustomerId() { return -1; }
 
   public void saveEmployee(Employee employee){}
   public Employee loadEmployee(int id){return null;}

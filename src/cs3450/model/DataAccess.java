@@ -50,6 +50,7 @@ public interface DataAccess{
   public int saveNewCustomer(Customer customer);
   public Customer loadCustomer(int id);
   public boolean isValidCustomerId(int id);
+  public int getNextCustomerId();
 
   public void saveEmployee(Employee employee);
   public Employee loadEmployee(int id);
