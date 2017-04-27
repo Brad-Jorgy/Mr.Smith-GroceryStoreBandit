@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.List;
 import cs3450.model.*;
 
-import cs3450.view.CardPaymentScreenView;
-import cs3450.view.CashPaymentScreenView;
+import cs3450.view.PaymentScreenView;
+//import cs3450.view.CashPaymentScreenView;
 
 public class CheckoutScreenControl {
     private static Customer currCustomer = null;
@@ -115,16 +115,6 @@ public class CheckoutScreenControl {
         updateCheckoutScreen(order);
     }
 
-    static public void updateDB(Order order) {
-        List<PurchaseItem> olist = order.getOrderList();
-        Iterator<PurchaseItem> orderIterator = olist.iterator();
-        while( orderIterator.hasNext()) {
-            PurchaseItem item = orderIterator.next();
-            DataAccess db = Main.getSQLiteAccess();
-            db.updateOrderInventory(item);
-        }
-    }
-
     static public void updateCheckoutScreen(Order order) {
         try {
             TimeUnit.SECONDS.sleep(1);
@@ -136,13 +126,13 @@ public class CheckoutScreenControl {
 
     public static void showCardPaymentScreen(JFrame frame, Order order) {
         frame.getContentPane().removeAll();
-        CardPaymentScreenView.addComponentsToPane(frame.getContentPane(), order);
+        PaymentScreenView.cardAddComponentsToPane(frame.getContentPane(), order);
         MainScreenControl.updateFrame();
     }
 
     public static void showCashPaymentScreen(JFrame frame, Order order) {
         frame.getContentPane().removeAll();
-        CashPaymentScreenView.addComponentsToPane(frame.getContentPane(), order);
+        PaymentScreenView.cashAddComponentsToPane(frame.getContentPane(), order);
         MainScreenControl.updateFrame();
     }
 
@@ -160,6 +150,18 @@ public class CheckoutScreenControl {
       else{
         currCustomer = db.loadCustomer(customerId);
         MainScreenControl.setOrderPremium(isLoyalCustomer());
+      }
+    }
+    public static double getCurrCustomerPoints(){ return currCustomer.getRewardPoints(); }
+    public static void resetCurrCustomerPoints(){ currCustomer.setRewardPoints(0); }
+    public static void incrementCurrCustomerPoints(Double totalCost){
+      totalCost += currCustomer.getRewardPoints();
+      currCustomer.setRewardPoints(totalCost.intValue());
+    }
+    public static void saveCurrCustomer(){
+      if(currCustomer!=null){
+        DataAccess db = Main.getSQLiteAccess();
+        db.saveCustomer(currCustomer);
       }
     }
 };

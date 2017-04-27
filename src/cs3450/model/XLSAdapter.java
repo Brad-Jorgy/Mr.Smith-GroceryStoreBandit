@@ -77,6 +77,7 @@ public class XLSAdapter implements DataAccess{
   public Order getOrder(int id){return null;}
   public void updateOrderInventory(PurchaseItem item){}
 
+  public void saveCustomer(Customer customer) {}
   public int saveNewCustomer(Customer customer) {return 0;}
   public Customer loadCustomer(int id) { return null; }
   public boolean isValidCustomerId(int id) { return false; }

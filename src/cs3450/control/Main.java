@@ -15,7 +15,7 @@ import cs3450.model.*;
 import cs3450.view.MainScreenView;
 import cs3450.view.CheckoutScreenView;
 import cs3450.view.InventoryScreenView;
-import cs3450.view.CardPaymentScreenView;
+//import cs3450.view.CardPaymentScreenView;
 import cs3450.view.LoginScreenView;
 import java.sql.Connection;
 import java.sql.Statement;

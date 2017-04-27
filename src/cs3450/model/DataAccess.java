@@ -47,6 +47,7 @@ public interface DataAccess{
   public Order getOrder(int id);
   public void updateOrderInventory(PurchaseItem item);
 
+  public void saveCustomer(Customer customer);
   public int saveNewCustomer(Customer customer);
   public Customer loadCustomer(int id);
   public boolean isValidCustomerId(int id);

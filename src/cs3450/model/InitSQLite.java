@@ -47,7 +47,7 @@ public class InitSQLite {
               statement.executeUpdate("insert into employees values(1, 'Default Manager', null, 'manager', '12345', 'Manager')");
             rs = statement.executeQuery("select * from customers");
             if(!rs.next())
-              statement.executeUpdate("insert into customers values(331993, 'Sam Christiansen', 0)");
+              statement.executeUpdate("insert into customers values(331993, 'Sam Christiansen', 110)");
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }

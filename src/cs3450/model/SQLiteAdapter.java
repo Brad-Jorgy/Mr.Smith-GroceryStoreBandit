@@ -178,6 +178,18 @@ public class SQLiteAdapter implements DataAccess{
     MainScreenControl.showInventoryScreen();
   }
 
+  public void saveCustomer(Customer customer) {
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      statement.executeUpdate("update customers set rewardPoints=" + customer.getRewardPoints() + " where customerId=" + customer.getId());
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+  }
   public int saveNewCustomer(Customer customer){
     Connection connection = null;
     try{
