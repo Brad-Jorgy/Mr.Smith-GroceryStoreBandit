@@ -230,6 +230,18 @@ public class SQLiteAdapter implements DataAccess{
     MainScreenControl.showInventoryScreen();
   }
 
+  public void saveCustomer(Customer customer) {
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      statement.executeUpdate("update customers set rewardPoints=" + customer.getRewardPoints() + " where customerId=" + customer.getId());
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+  }
   public int saveNewCustomer(Customer customer){
     Connection connection = null;
     try{
@@ -238,9 +250,9 @@ public class SQLiteAdapter implements DataAccess{
       statement.setQueryTimeout(30);
       ResultSet rs = statement.executeQuery("select count(*) from customers");
       rs.next();
-      int maxCount = rs.getInt(1);
-      statement.executeUpdate("insert into customers values(" + (maxCount + 1) + ", '" + customer.getName() + "', " + customer.getPremium() + ", " + customer.getRewardPoints() + ")");
-      return maxCount + 1;
+      int maxCount = rs.getInt(1) + 1;
+      statement.executeUpdate("insert into customers values(" + maxCount + ", '" + customer.getName() + "', " + customer.getRewardPoints() + ")");
+      return maxCount;
     }
     catch (SQLException e) {
       System.out.println(e.getMessage());
@@ -255,7 +267,7 @@ public class SQLiteAdapter implements DataAccess{
       statement.setQueryTimeout(30);
       ResultSet rs = statement.executeQuery("select * from customers where customerId="+id);
       if(rs.next())
-        return new Customer(rs.getInt("customerId"), rs.getString("name"), rs.getBoolean("premium"), rs.getInt("rewardPoints"));
+        return new Customer(rs.getInt("customerId"), rs.getString("name"), rs.getInt("rewardPoints"));
     }
     catch(SQLException e){
       System.out.println(e.getMessage());
@@ -275,6 +287,21 @@ public class SQLiteAdapter implements DataAccess{
       System.out.println(e.getMessage());
     }
     return false;
+  }
+  public int getNextCustomerId(){
+    Connection connection = null;
+    try{
+      connection = Main.getDbConnection();
+      Statement statement = connection.createStatement();
+      statement.setQueryTimeout(30);
+      ResultSet rs = statement.executeQuery("select count(*) from customers");
+      rs.next();
+      return rs.getInt(1) + 1;
+    }
+    catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return -1;
   }
 
   public void saveEmployee(Employee employee){

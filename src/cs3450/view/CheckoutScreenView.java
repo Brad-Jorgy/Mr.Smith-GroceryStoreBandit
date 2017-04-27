@@ -36,7 +36,7 @@ public class CheckoutScreenView{
         Iterator<PurchaseItem> orderIterator = olist.iterator();
         while( orderIterator.hasNext()) {
             PurchaseItem item = orderIterator.next();
-            if(CheckoutScreenControl.isCurrCustomerPremium())
+            if(CheckoutScreenControl.isLoyalCustomer())
               listModel.addElement(item.toStringDiscount());
             else
               listModel.addElement(item);

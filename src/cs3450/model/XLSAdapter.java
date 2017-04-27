@@ -39,9 +39,6 @@ public class XLSAdapter implements DataAccess{
     return asdf;
   }
   public void saveNewProduct(Product product){}
-  public int saveNewCustomer(Customer customer) {return (0);}
-  public int saveNewOrder(Order order){return (0);}
-  public void updateItemsCount(PurchaseItem purchaseItem, int h) {};
   public ArrayList<Product> loadAllProducts(){
     ArrayList<Product> products = new ArrayList<Product>();
     try{
@@ -79,10 +76,14 @@ public class XLSAdapter implements DataAccess{
 
   public Order getOrder(int id){return null;}
   public void updateOrderInventory(PurchaseItem item, boolean h){}
+  public int saveNewOrder(Order order){return (0);}
+  public void updateItemsCount(PurchaseItem purchaseItem, int h) {};
 
-
+  public void saveCustomer(Customer customer) {}
+  public int saveNewCustomer(Customer customer) {return 0;}
   public Customer loadCustomer(int id) { return null; }
   public boolean isValidCustomerId(int id) { return false; }
+  public int getNextCustomerId() { return -1; }
 
   public void saveEmployee(Employee employee){}
   public Employee loadEmployee(int id){return null;}

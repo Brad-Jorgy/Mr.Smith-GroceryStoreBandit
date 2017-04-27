@@ -3,8 +3,8 @@ package cs3450.control;
 import cs3450.model.DataAccess;
 import cs3450.model.Order;
 import cs3450.model.PurchaseItem;
-import cs3450.view.CardPaymentScreenView;
-import cs3450.view.CashPaymentScreenView;
+//import cs3450.view.CardPaymentScreenView;
+import cs3450.view.PaymentScreenView;
 import cs3450.view.ReturnItemScreenView;
 
 import javax.swing.*;
@@ -84,13 +84,13 @@ public class ReturnItemScreenControl {
 
     public static void showCardPaymentScreen(JFrame frame, Order order) {
         frame.getContentPane().removeAll();
-        CardPaymentScreenView.addComponentsToPane(frame.getContentPane(), order);
+        PaymentScreenView.cardAddComponentsToPane(frame.getContentPane(), order);
         MainScreenControl.updateFrame();
     }
 
     public static void showCashPaymentScreen(JFrame frame, Order order) {
         frame.getContentPane().removeAll();
-        CashPaymentScreenView.addComponentsToPane(frame.getContentPane(), order);
+        PaymentScreenView.cashAddComponentsToPane(frame.getContentPane(), order);
         MainScreenControl.updateFrame();
     }
 }
