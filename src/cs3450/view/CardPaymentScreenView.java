@@ -56,7 +56,7 @@ public class CardPaymentScreenView {
                 if (order.getOrderSize() > 0) {
                     DataAccess db = Main.getSQLiteAccess();
                     int orderId = db.saveNewOrder(order);
-                    CheckoutScreenControl.updateDB(order);
+//                    CheckoutScreenControl.updateDB(order);
                     order.clearOrder();
                 }
                 MainScreenControl.showMainScreen();

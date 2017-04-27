@@ -34,7 +34,7 @@ public class ReturnItemScreenControl {
             purchaseItem.setQuantityChange(requestedQuantity-purchaseItem.getQuantity());
             order.subtractItemCount(purchaseItem, requestedQuantity-purchaseItem.getQuantity());
             DataAccess db = Main.getSQLiteAccess();
-            db.updateItemsCount(purchaseItem, requestedQuantity-purchaseItem.getQuantity());
+            db.updateItemsCount(new PurchaseItem(0, purchaseItem.getOrderId(), purchaseItem.getProduct(), purchaseItem.getQuantity()), requestedQuantity-purchaseItem.getQuantity());
         }
         else{
             System.out.println("Fail save");
@@ -42,7 +42,7 @@ public class ReturnItemScreenControl {
        updateReturnScreen(order);
     }
 
-    static public void selectOrderToEditPopup() {
+    static public void selectOrderToEditPopup(Order order) {
         JPanel popupPanel = new JPanel();
         popupPanel.setLayout(new GridLayout(5, 2));
         JTextField idTF = new JTextField();
@@ -50,7 +50,7 @@ public class ReturnItemScreenControl {
         popupPanel.add(idTF);
 
         int result = JOptionPane.showConfirmDialog(null, popupPanel, "Select Order For Return", JOptionPane.OK_CANCEL_OPTION);
-        Order order = null;
+//        Order order = null;
         if (result == JOptionPane.OK_OPTION) {
             DataAccess db = Main.getSQLiteAccess();
             order = db.getOrder(Integer.parseInt(idTF.getText()));

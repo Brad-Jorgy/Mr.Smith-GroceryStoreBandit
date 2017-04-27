@@ -59,7 +59,7 @@ public class MainScreenView {
         if(MainScreenControl.isCurrEmployeeCS()||MainScreenControl.isCurrEmployeeManager()){
           returnBtn.addActionListener(new ActionListener() {
               @Override
-              public void actionPerformed(ActionEvent e) { MainScreenControl.showReturnScreen(order); }
+              public void actionPerformed(ActionEvent e) { MainScreenControl.showReturnScreen(new Order()); }
           });
         }
         else{

@@ -128,6 +128,7 @@ public class CheckoutScreenControl {
         return false;
       return currCustomer.getPremium();
     }
+
     public static void setCurrCustomer(int customerId) {
       DataAccess db = Main.getSQLiteAccess();
       if(customerId == -1){

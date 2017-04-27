@@ -91,17 +91,17 @@ public class ReturnItemScreenView {
             submitBtn.addMouseListener(new MouseAdapter(){
                 public void mousePressed(MouseEvent e) {
 //                MainScreenControl.showCheckoutScreen();
-                    if (order.getOrderSize() > 0) {
-                        DataAccess db = Main.getSQLiteAccess();
-                        //CheckoutScreenControl.updateDB(order);
-                    }
+//                    if (order.getOrderSize() > 0) {
+//                        DataAccess db = Main.getSQLiteAccess();
+//                        CheckoutScreenControl.updateDB(order);
+//                    }
                     MainScreenControl.showMainScreen();
                 }
             });
 
             selectOrderNumBtn.addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
-                    ReturnItemScreenControl.selectOrderToEditPopup();
+                    ReturnItemScreenControl.selectOrderToEditPopup(order);
                 }
             });
 
