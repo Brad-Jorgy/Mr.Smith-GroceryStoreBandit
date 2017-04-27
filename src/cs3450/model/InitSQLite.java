@@ -39,6 +39,7 @@ public class InitSQLite {
             statement.setQueryTimeout(30);
             statement.executeUpdate("create table if not exists inventory (itemId integer primary key, name string, price double, discountPrice double, quantity integer, provider string)");
             statement.executeUpdate("create table if not exists orders (orderId integer primary key, itemId integer, quantity integer)");
+            statement.executeUpdate("create table if not exists orderItem (orderItemId INTEGER PRIMARY KEY, orderId integer, itemId integer, quantity integer)");
             statement.executeUpdate("create table if not exists purchaseHistory (orderId integer primary key, customerId integer, date datetime)");
             statement.executeUpdate("create table if not exists customers (customerId integer primary key, name string, premium boolean, rewardPoints integer)");
             statement.executeUpdate("create table if not exists employees (employeeId integer primary key, name string, image blob, username string, password string, position string)");

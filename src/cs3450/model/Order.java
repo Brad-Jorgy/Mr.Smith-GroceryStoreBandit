@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 public class Order {
 	private Map<Product, Integer> mItemsList;
 	private int orderNumber;
+	private int orderCustomer;
 	private double mTotal;
 	private boolean isPremium = false;
 
@@ -26,7 +27,11 @@ public class Order {
 	public int getOrderSize() {	return mItemsList.size(); }
 	public int getItem(Product product) {	return mItemsList.get(product);	}
 	public double getTotal() { return mTotal; }
-	public void clearOrder() {
+    public int getOrderCustomer() { return orderCustomer; }
+    public void setOrderCustomer(int customerNumber) {
+        orderCustomer = customerNumber;
+    }
+    public void clearOrder() {
 		mItemsList.clear();
 		orderNumber = -1;
 		mTotal = 0;
@@ -45,6 +50,29 @@ public class Order {
 		else
 			mTotal = mTotal + product.getPrice() * quantity;
 	}
+
+	public void subtractItemCount(PurchaseItem purchaseItem, int numberToSubtract) {
+		Integer q = mItemsList.get(purchaseItem.getProduct());
+		if (q == null) {
+			q = purchaseItem.getQuantityChange();
+		} else {
+			q = q + numberToSubtract;
+		}
+		mItemsList.put(purchaseItem.getProduct(), q);
+		mTotal = mTotal + purchaseItem.getProduct().getPrice() * q;
+	}
+
+	public void addItemCount(PurchaseItem purchaseItem, int numberToAdd) {
+		Integer q = mItemsList.get(purchaseItem.getProduct());
+		if (q == null) {
+			q = purchaseItem.getQuantityChange();
+		} else {
+			q = q + numberToAdd;
+		}
+		mItemsList.put(purchaseItem.getProduct(), q);
+		mTotal = mTotal + purchaseItem.getProduct().getPrice() * q;
+	}
+
 	public void editItem(Product product, int quantity) {
 		Integer q = mItemsList.get(product);
 		if (q != null) {
@@ -71,7 +99,7 @@ public class Order {
 		for (Entry<Product, Integer> entry : mItemsList.entrySet()) {
 			Product p = entry.getKey();
 			Integer q = entry.getValue();
-			itemList.add(new PurchaseItem(p, q));
+			itemList.add(new PurchaseItem(orderCustomer,orderNumber,p, q));
 		}
 		return itemList;
 	}

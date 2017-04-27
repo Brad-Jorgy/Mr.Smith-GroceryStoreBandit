@@ -16,6 +16,7 @@ import cs3450.model.Product;
 import cs3450.control.MainScreenControl;
 import cs3450.model.Order;
 
+
 public class MainScreenView {
     public static void addComponentsToPane(Container pane)
     {
@@ -58,9 +59,7 @@ public class MainScreenView {
         if(MainScreenControl.isCurrEmployeeCS()||MainScreenControl.isCurrEmployeeManager()){
           returnBtn.addActionListener(new ActionListener() {
               @Override
-              public void actionPerformed(ActionEvent e) {
-                  MainScreenControl.showReturnScreen();
-              }
+              public void actionPerformed(ActionEvent e) { MainScreenControl.showReturnScreen(new Order()); }
           });
         }
         else{

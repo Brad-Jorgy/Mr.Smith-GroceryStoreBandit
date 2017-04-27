@@ -57,10 +57,10 @@ public class MainScreenControl{
         if(showPopup)
           CheckoutScreenControl.showPremiumCustomerPopup();
     }
-	public static void showReturnScreen()
+	public static void showReturnScreen(Order order)
 	{
 		frame.getContentPane().removeAll();
-		ReturnItemScreenView.addComponentsToPane(frame.getContentPane(), currentOrder);
+		ReturnItemScreenView.addComponentsToPane(frame.getContentPane(), order);
 		updateFrame();
 	}
 

@@ -39,6 +39,9 @@ public class XLSAdapter implements DataAccess{
     return asdf;
   }
   public void saveNewProduct(Product product){}
+  public int saveNewCustomer(Customer customer) {return (0);}
+  public int saveNewOrder(Order order){return (0);}
+  public void updateItemsCount(PurchaseItem purchaseItem, int h) {};
   public ArrayList<Product> loadAllProducts(){
     ArrayList<Product> products = new ArrayList<Product>();
     try{
@@ -73,11 +76,11 @@ public class XLSAdapter implements DataAccess{
   }
   public boolean isValidProductId(int id){return true;}
 
-  public int saveNewOrder(Order order){return 0;}
-  public Order getOrder(int id){return null;}
-  public void updateOrderInventory(PurchaseItem item){}
 
-  public int saveNewCustomer(Customer customer) {return 0;}
+  public Order getOrder(int id){return null;}
+  public void updateOrderInventory(PurchaseItem item, boolean h){}
+
+
   public Customer loadCustomer(int id) { return null; }
   public boolean isValidCustomerId(int id) { return false; }
 
@@ -88,4 +91,6 @@ public class XLSAdapter implements DataAccess{
   public void deleteEmployee(Employee employee){}
   public int getUserId(String username, String password){return -1;}
   public int getNewEmployeeId() { return -1; }
+
+
 }

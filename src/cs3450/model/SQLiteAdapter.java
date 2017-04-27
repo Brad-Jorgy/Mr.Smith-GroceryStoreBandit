@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 import cs3450.control.Main;
 import cs3450.view.MainScreenView;
@@ -19,9 +20,14 @@ public class SQLiteAdapter implements DataAccess{
     Connection connection = null;
     try{
       connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
-      statement.setQueryTimeout(30);
-      statement.executeUpdate("update inventory set name='"+product.getName()+"', price="+product.getPrice()+", discountPrice="+product.getDiscountPrice()+"quantity="+product.getQuantity()+", provider='"+product.getProvider()+"' where itemId="+product.getId());
+      PreparedStatement pstmt = connection.prepareStatement("update inventory set name = ?, price = ?, discountPrice = ?, quantity = ?, provider = ? where itemId = ?");
+      pstmt.setString(1,product.getName() );
+      pstmt.setDouble(2,product.getPrice() );
+      pstmt.setDouble(3,product.getDiscountPrice());
+      pstmt.setInt(4,product.getQuantity());
+      pstmt.setString(5,product.getProvider());
+      pstmt.setInt(6, product.getId());
+      pstmt.executeUpdate();
     }
     catch (SQLException e) {
       System.out.println(e.getMessage());
@@ -114,56 +120,102 @@ public class SQLiteAdapter implements DataAccess{
     return -1;
   }
 
-
-  public int saveNewOrder(Order order){
+  public void updateItemsCount(PurchaseItem orderItem, int countChange){
     Connection connection = null;
-    try{
+    try {
       connection = Main.getDbConnection();
-      Statement statement = connection.createStatement();
+      PreparedStatement statement = connection.prepareStatement("update orderItem set quantity = ? where itemId = ? and orderId = ?");
       statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select count(*) from orders");
-      rs.next();
-      int maxCount = rs.getInt(1) + 1;
+      statement.setInt(1, orderItem.getQuantity()+ countChange);
+      statement.setInt(2, orderItem.getProduct().getId());
+      statement.setInt(3,orderItem.getOrderId());
+      statement.executeUpdate();
+
+      statement = connection.prepareStatement("update inventory set quantity = ? where itemId = ?");
+      statement.setQueryTimeout(30);
+      statement.setInt(1, orderItem.getProduct().getQuantity() - countChange);
+      statement.setInt(2, orderItem.getProduct().getId());
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+  public int saveNewOrder(Order order) {
+    Connection connection = null;
+    int orderId, orderItemId;
+    try {
+      connection = Main.getDbConnection();
       List<PurchaseItem> olist = order.getOrderList();
       Iterator<PurchaseItem> orderIterator = olist.iterator();
       PurchaseItem item = null;
-      while( orderIterator.hasNext()) {
-          item = orderIterator.next();
-          statement.executeUpdate("insert into orders values(" + maxCount + ", " + item.getId() + ", " + item.getQuantity() + ")");
+      PreparedStatement pstmt = connection.prepareStatement("insert into orders (itemId)values(?)");
+      pstmt.setInt(1, order.getOrderCustomer());
+      pstmt.executeUpdate();
+      try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+        if (generatedKeys.next()) {
+          orderId = generatedKeys.getInt(1);
+        } else {
+          throw new SQLException("Creating order failed, no ID obtained.");
+        }
       }
-      return maxCount;
-    }
-    catch (SQLException e) {
-        System.out.println(e.getMessage());
+
+
+      while (orderIterator.hasNext()) {
+        pstmt = connection.prepareStatement("insert into orderItem (orderId,itemId,quantity)values(?,?,?)");
+        item = orderIterator.next();
+        pstmt.setInt(1, orderId);
+        pstmt.setInt(2, item.getId());
+        pstmt.setInt(3, item.getQuantity());
+        pstmt.executeUpdate();
+        pstmt = connection.prepareStatement("update inventory set quantity = ? where itemId = ?");
+        pstmt.setQueryTimeout(30);
+        pstmt.setInt(1, item.getProduct().getQuantity() - item.getQuantity());
+        pstmt.setInt(2, item.getId());
+        pstmt.executeUpdate();
+        try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+          if (generatedKeys.next()) {
+            orderItemId = generatedKeys.getInt(1);
+          } else {
+            throw new SQLException("Creating orderItem failed, no ID obtained.");
+          }
+        }
+      }
+      return orderId;
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
     }
     return -1;
   }
-  public Order getOrder(int id){
+
+  public Order getOrder(int id) {
     Connection connection = null;
-    Order empty = new Order();
-    try{
+    Order newOrder = new Order();
+    try {
       connection = Main.getDbConnection();
       Statement statement = connection.createStatement();
       statement.setQueryTimeout(30);
-      ResultSet rs = statement.executeQuery("select count(*) from orders");
+      ResultSet rs = statement.executeQuery("select * from orders where orderId=" + id);
       rs.next();
-      int maxCount = rs.getInt(1);
-      if(id > maxCount || id < 1){
-          System.out.println("Invalid itemId");
+      int orderId = rs.getInt(1);
+      if (id != orderId) {
+        System.out.println("Invalid itemId");
+      } else {
+ //       newOrder.setOrderCustomer(rs.getInt("customerId"));
+  //      newOrder.setOrderNumber(orderId);
+        rs = statement.executeQuery("select * from orderItem where orderId=" + orderId);
+        while(rs.next()){
+          newOrder.addItem(loadProduct(rs.getInt("itemId")),rs.getInt("quantity"));
+        };
+        newOrder.setOrderNumber(id);
+        return newOrder;
       }
-      else{
-        rs = statement.executeQuery("select * from orders where itemId="+id);
-        int iid = rs.getInt("itemId");
-        Product prod = new Product(iid, rs.getString("name"), rs.getDouble("price"), rs.getDouble("discountPrice"), rs.getInt("quantity"), rs.getString("provider"));
-        return new Order(prod, id);
-      }
-    }
-    catch (SQLException e) {
+    } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
-    return empty;
+    return newOrder;
   }
-  public void updateOrderInventory(PurchaseItem item) {
+
+  public void updateOrderInventory(PurchaseItem item, boolean h) {
     Connection connection = null;
     Product prodIn = loadProduct(item.getId());
     int newCount = prodIn.getQuantity() - item.getQuantity();
