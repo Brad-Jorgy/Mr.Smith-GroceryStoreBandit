@@ -26,9 +26,9 @@ public class Main {
 	private static DataAccess sqliteAccess;
 	private static Connection connection;
 
-	public static void startProgram()
+	public static void startProgram(String xlsxFile)
 	{
-		connection = InitSQLite.setupDatabaseIfNotSetup();
+		connection = InitSQLite.setupDatabaseIfNotSetup(xlsxFile);
 		try{
       sqliteAccess = new SQLiteAdapter();
 			Class.forName("org.sqlite.JDBC");
@@ -40,7 +40,11 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		startProgram();
+		if(args.length > 0) {
+			startProgram(args[0]);
+		}else{
+			startProgram("");
+		}
 	}
 
 	public static Connection getDbConnection() {
