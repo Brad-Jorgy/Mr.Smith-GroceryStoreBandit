@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class xlsxScreen extends Screen {
 
@@ -24,19 +25,16 @@ public class xlsxScreen extends Screen {
     private JFileChooser mFileChooser;
 
     // InstalationSetting
-    Installation xlsxInstallation;
 
     public xlsxScreen(JFrame frame, Installation installation) {
         super(frame);
-
-        xlsxInstallation = installation;
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(10, 10));
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         addPanel(mainPanel);
 
-        JLabel title = new JLabel("Shop assistance system Setup");
+        JLabel title = new JLabel("Grocery Store Bandit Setup");
         title.setFont(new Font("Serif", Font.BOLD, 22));
         title.setMaximumSize(new Dimension(Integer.MAX_VALUE, title.getMinimumSize().height));
         mainPanel.add(title, BorderLayout.NORTH);
@@ -46,18 +44,20 @@ public class xlsxScreen extends Screen {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         mFileChooser = new JFileChooser();
-        mFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        //mFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        FileNameExtensionFilter Filter = new FileNameExtensionFilter("DB Description", "xlsx");
+        mFileChooser.setFileFilter(Filter);
 
         JPanel browsePanel = new JPanel();
         browsePanel.setLayout(new BoxLayout(browsePanel, BoxLayout.X_AXIS));
         centerPanel.add(browsePanel);
 
-        browsePanel.add(new JLabel("Installation path:"));
+        browsePanel.add(new JLabel("Path to xlsx file: "));
 
         browsePanel.add(Box.createRigidArea(new Dimension(10, 0)));
 
         mPathField = new JTextField();
-        mPathField.setText(xlsxInstallation.getInstallationLocation());
+        mPathField.setText(installation.getInstallationLocation());
         mPathField.setMaximumSize(new Dimension(600, 32));
         browsePanel.add(mPathField);
 
@@ -73,7 +73,7 @@ public class xlsxScreen extends Screen {
                     File file = mFileChooser.getSelectedFile();
                     String path = file.getAbsolutePath();
                     mPathField.setText(path);
-                    xlsxInstallation.setInstallationLocation(path);
+                   installation.setXlsxLocation(path);
                 }
             }
         });
@@ -88,7 +88,7 @@ public class xlsxScreen extends Screen {
             @Override
             public void actionPerformed(ActionEvent e) {
                 removePanel(mainPanel);
-                new LocationScreen(frame, xlsxInstallation);
+                new xlsxScreen(frame, installation);
             }
         });
         panel.add(mPrevious);
@@ -98,7 +98,7 @@ public class xlsxScreen extends Screen {
             @Override
             public void actionPerformed(ActionEvent e) {
                 removePanel(mainPanel);
-                new ConfirmationScreen(frame, xlsxInstallation);
+                new ConfirmationScreen(frame, installation);
             }
         });
         panel.add(mNext);

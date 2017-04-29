@@ -14,12 +14,11 @@ public class ConfirmationScreen extends Screen {
 	private JButton mPrevious;
 
 	// InstalationSetting
-	Installation mInstallation;
+
 
 	public ConfirmationScreen(JFrame frame, Installation installation) {
 		super(frame);
 
-		mInstallation = installation;
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout(10, 10));
@@ -36,7 +35,7 @@ public class ConfirmationScreen extends Screen {
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 
 		JTextArea textArea = new JTextArea();
-		String statusText = mInstallation.getIstallationSetting();
+		String statusText = installation.getIstallationSetting();
 		textArea.setText(statusText);
 		textArea.setEditable(false);
 		JScrollPane scollPane = new JScrollPane(textArea);
@@ -51,7 +50,7 @@ public class ConfirmationScreen extends Screen {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				removePanel(mainPanel);
-				new LocationScreen(frame, mInstallation);
+				new LocationScreen(frame, installation);
 			}
 		});
 		panel.add(mPrevious);
@@ -60,9 +59,9 @@ public class ConfirmationScreen extends Screen {
 		mNext.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mInstallation.install();
+				installation.install();
 				removePanel(mainPanel);
-				new RunScreen(frame, mInstallation);
+				new RunScreen(frame, installation);
 			}
 		});
 		panel.add(mNext);

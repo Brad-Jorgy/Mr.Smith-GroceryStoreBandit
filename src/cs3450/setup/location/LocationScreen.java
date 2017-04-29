@@ -36,7 +36,7 @@ public class LocationScreen extends Screen {
 		mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		addPanel(mainPanel);
 
-		JLabel title = new JLabel("Shop assistance system Setup");
+		JLabel title = new JLabel("Grocery Store Bandit Setup");
 		title.setFont(new Font("Serif", Font.BOLD, 22));
 		title.setMaximumSize(new Dimension(Integer.MAX_VALUE, title.getMinimumSize().height));
 		mainPanel.add(title, BorderLayout.NORTH);
@@ -98,7 +98,7 @@ public class LocationScreen extends Screen {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				removePanel(mainPanel);
-				new xlsxScreen(frame, new Installation());
+				new xlsxScreen(frame, mInstallation);
 			}
 		});
 		panel.add(mNext);

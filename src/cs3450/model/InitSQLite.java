@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class InitSQLite {
-    public static Connection setupDatabaseIfNotSetup() {
+    public static Connection setupDatabaseIfNotSetup(String xlsxFile) {
         Connection connection = null;
         Statement statement = null;
         File file = new File("cs3450.db");
@@ -20,7 +20,7 @@ public class InitSQLite {
               connection = DriverManager.getConnection("jdbc:sqlite:cs3450.db");
               statement = connection.createStatement();
               statement.executeUpdate("create table if not exists inventory (itemId integer, name string, price double, discountPrice double, quantity integer, provider string)");
-              DataAccess db = new XLSAdapter();
+              DataAccess db = new XLSAdapter(xlsxFile);
               ArrayList<Product> products = db.loadAllProducts();
               for (int i = 0; i < products.size(); i++)
                 statement.executeUpdate("insert into inventory values(" + products.get(i).getId() + ", '" + products.get(i).getName() + "', " + products.get(i).getPrice() + ", " + products.get(i).getDiscountPrice() + ", " + products.get(i).getQuantity() + ", '" + products.get(i).getProvider() + "')");

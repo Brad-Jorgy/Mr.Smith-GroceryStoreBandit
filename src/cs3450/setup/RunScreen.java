@@ -15,19 +15,18 @@ public class RunScreen extends Screen {
 	private JButton mDone;
 
 	// InstalationSetting
-	Installation mInstallation;
+
 
 	public RunScreen(JFrame frame, Installation installation) {
 		super(frame);
 
-		mInstallation = installation;
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout(10, 10));
 		mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		addPanel(mainPanel);
 
-		JLabel title = new JLabel("Shop assistance system Setup");
+		JLabel title = new JLabel("Grocery Store Bandit Setup");
 		title.setFont(new Font("Serif", Font.BOLD, 22));
 		title.setMaximumSize(new Dimension(Integer.MAX_VALUE, title.getMinimumSize().height));
 		mainPanel.add(title, BorderLayout.NORTH);
@@ -37,7 +36,8 @@ public class RunScreen extends Screen {
 		mainPanel.add(centerPanel, BorderLayout.CENTER);
 
 		JTextArea textArea = new JTextArea();
-		textArea.setText(mInstallation.getIstallationStatus());
+		textArea.setText(installation.getmIstallationStatus());
+		textArea.setText(installation.getXlsxIstallationStatus());
 		textArea.setEditable(false);
 		JScrollPane scollPane = new JScrollPane(textArea);
 		centerPanel.add(scollPane);
@@ -55,15 +55,16 @@ public class RunScreen extends Screen {
 		});
 		panel.add(mDone);
 
-		if (mInstallation.isSuccessfull()) {
+		if (installation.ismInstalledSuccessfull() && installation.isXlsxInstalledSuccessfully()) {
 			JButton run = new JButton("Run");
 			run.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Start the program
 					try {
-						Process p = Runtime.getRuntime().exec("cmd /c program.jar", null,
-								new File(mInstallation.getInstallationLocation()));
+						String[] cmdLine = {"java", "-jar", "program.jar", installation.getXlsxLocation()};
+						Process p = Runtime.getRuntime().exec(cmdLine, null,
+								new File(installation.getInstallationLocation()));
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}

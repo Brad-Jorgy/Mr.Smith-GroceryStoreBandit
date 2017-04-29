@@ -32,6 +32,8 @@ import cs3450.view.InventoryScreenView;
 import cs3450.control.Main;
 
 public class  XLSAdapter implements DataAccess{
+  private String xlsxIn;
+  public XLSAdapter(String xlsxFile){xlsxIn = xlsxFile; }
   public void deleteProduct(Product product) { }
   public void saveProduct(Product product){  }
   public Product loadProduct(int id){
@@ -42,7 +44,7 @@ public class  XLSAdapter implements DataAccess{
   public ArrayList<Product> loadAllProducts(){
     ArrayList<Product> products = new ArrayList<Product>();
     try{
-      FileInputStream file = new FileInputStream(new File("..\\bin\\sampleInventory.xlsx"));
+      FileInputStream file = new FileInputStream(new File(xlsxIn));
       XSSFWorkbook workbook = new XSSFWorkbook(file);
       XSSFSheet sheet = workbook.getSheetAt(0);
       Iterator<Row> rowIter = sheet.iterator();
