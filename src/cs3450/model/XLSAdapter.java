@@ -31,7 +31,7 @@ import cs3450.view.MainScreenView;
 import cs3450.view.InventoryScreenView;
 import cs3450.control.Main;
 
-public class XLSAdapter implements DataAccess{
+public class  XLSAdapter implements DataAccess{
   public void deleteProduct(Product product) { }
   public void saveProduct(Product product){  }
   public Product loadProduct(int id){
