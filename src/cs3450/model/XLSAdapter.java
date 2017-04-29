@@ -31,9 +31,14 @@ import cs3450.view.MainScreenView;
 import cs3450.view.InventoryScreenView;
 import cs3450.control.Main;
 
-public class  XLSAdapter implements DataAccess{
+
+public class XLSAdapter implements DataAccess{
   private String xlsxIn;
-  public XLSAdapter(String xlsxFile){xlsxIn = xlsxFile; }
+  public XLSAdapter(String xlsxFile){xlsxIn = xlsxFile; } 
+  public void updateHistory(int customerId, Order order) { }
+  public void generateInventoryReport(String timeFrame) { }
+  public void generateCustomerReport(String timeFrame) { }
+
   public void deleteProduct(Product product) { }
   public void saveProduct(Product product){  }
   public Product loadProduct(int id){
