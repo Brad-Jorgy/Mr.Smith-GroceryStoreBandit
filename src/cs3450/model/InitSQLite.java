@@ -40,7 +40,8 @@ public class InitSQLite {
             statement.executeUpdate("create table if not exists inventory (itemId integer primary key, name string, price double, discountPrice double, quantity integer, provider string)");
             statement.executeUpdate("create table if not exists orders (orderId integer primary key, itemId integer, quantity integer)");
             statement.executeUpdate("create table if not exists orderItem (orderItemId INTEGER PRIMARY KEY, orderId integer, itemId integer, quantity integer)");
-            statement.executeUpdate("create table if not exists purchaseHistory (orderId integer primary key, customerId integer, date datetime)");
+            statement.executeUpdate("create table if not exists purchaseHistory (date string primary key, productId integer, quantitySold integer)");
+            statement.executeUpdate("create table if not exists customerHistory (date string primary key, customerId integer, moneySpent double)");
             statement.executeUpdate("create table if not exists customers (customerId integer primary key, name string, rewardPoints integer)");
             statement.executeUpdate("create table if not exists employees (employeeId integer primary key, name string, image blob, username string, password string, position string)");
             ResultSet rs = statement.executeQuery("select * from employees");

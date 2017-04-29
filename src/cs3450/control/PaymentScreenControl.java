@@ -21,6 +21,7 @@ public class PaymentScreenControl {
         updateDB(order);
     }
     updateRewardPoints(order);
+    db.updateHistory(CheckoutScreenControl.getCurrCustomerId(), order);
     order.clearOrder();
     CheckoutScreenControl.saveCurrCustomer();
     MainScreenControl.showMainScreen();

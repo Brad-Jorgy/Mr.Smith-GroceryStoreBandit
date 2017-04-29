@@ -10,7 +10,6 @@ import java.lang.*;
 import cs3450.model.*;
 
 import cs3450.view.PaymentScreenView;
-//import cs3450.view.CashPaymentScreenView;
 
 
 public class CheckoutScreenControl {
@@ -88,9 +87,6 @@ public class CheckoutScreenControl {
         if(result == JOptionPane.OK_OPTION){
             int requestedQuantity = Integer.parseInt(quantityTF.getText());
             purchaseItem.setQuantityChange(purchaseItem.getQuantity()+requestedQuantity);
-//            order.addItemCount(purchaseItem, requestedQuantity+purchaseItem.getQuantity());
-//            DataAccess db = Main.getSQLiteAccess();
-//            db.updateItemsCount(purchaseItem, requestedQuantity+purchaseItem.getQuantity());
         }
         else{
             System.out.println("Fail save");
@@ -143,7 +139,11 @@ public class CheckoutScreenControl {
         return false;
       return true;
     }
-
+    public static int getCurrCustomerId(){
+      if(currCustomer == null)
+        return -1;
+      return currCustomer.getId();
+    }
     public static void setCurrCustomer(int customerId) {
       DataAccess db = Main.getSQLiteAccess();
       if(customerId == -1){

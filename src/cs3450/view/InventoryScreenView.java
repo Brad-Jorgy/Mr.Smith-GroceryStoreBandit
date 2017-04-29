@@ -23,6 +23,7 @@ public class InventoryScreenView {
       JButton deleteBtn = new JButton("Delete Selected Product");
       JButton updateBtn = new JButton("Update Selected Product");
       JButton addBtn = new JButton("Add Product");
+      JButton reportsBtn = new JButton("Generate Reports");
       ArrayList<Product> products = InventoryScreenControl.getInventoryProducts();
       for(int i = 0; i < products.size(); i++){
         listModel.addElement(products.get(i).getId()+": "+products.get(i).getName()+" $"+products.get(i).getPrice()+" (discount: $"+products.get(i).getDiscountPrice()+"), "+products.get(i).getQuantity()+" in stock, ("+products.get(i).getProvider()+")");
@@ -40,7 +41,7 @@ public class InventoryScreenView {
       c.weighty = 1;
       c.gridx = 0;
       c.gridy = 0;
-      c.gridwidth = 4;
+      c.gridwidth = 5;
       backBtn.addMouseListener(new MouseAdapter(){
         public void mousePressed(MouseEvent e) {
           MainScreenControl.showMainScreen();
@@ -61,6 +62,11 @@ public class InventoryScreenView {
           InventoryScreenControl.showAddProductPopup();
         }
       });
+      reportsBtn.addMouseListener(new MouseAdapter(){
+        public void mousePressed(MouseEvent e){
+          InventoryScreenControl.showReportsPopup();
+        }
+      });
       pane.add(title, c);
       c.gridx = 0;
       c.gridy = 1;
@@ -75,5 +81,7 @@ public class InventoryScreenView {
       pane.add(updateBtn, c);
       c.gridx = 3;
       pane.add(addBtn, c);
+      c.gridx = 4;
+      pane.add(reportsBtn, c);
     }
 }
